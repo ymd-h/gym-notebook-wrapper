@@ -14,6 +14,8 @@ class NotebookWrapper(Wrapper):
         """
         Wrapping environment for Notebook
 
+        Parameters
+        ----------
         env : gym.Env
             Environment to be wrapped
         size : array-like, optional
