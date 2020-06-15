@@ -6,6 +6,21 @@ import matplotlib.pyplot as plt
 from pyvirtualdisplay import Display
 
 
+class VirtualDisplay(Wrapper):
+    """
+    Wrapper for running Xvfb
+    """
+    def __init__(self,env,size=(1024, 768)):
+        """
+        Wrapping environment and start Xvfb
+        """
+        super().__init__(env)
+        self._display = None
+        # To avoid starting multiple virtual display
+        if not os.getenv("DISPLAY",None):
+            self._display = Display(visible=0, size=size)
+            self._display.start()
+
 class NotebookWrapper(Wrapper):
     """
     Wrapper for running/rendering OpenAI gym environment on Notebook
