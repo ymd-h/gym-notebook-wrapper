@@ -40,3 +40,8 @@ for _ in range(1000):
 	if done:
 	    obs = env.reset()
 ```
+
+# Limitation
+
+- Calling `render()` method delete the other output for the same cell.
+- The output image is shown only once.
