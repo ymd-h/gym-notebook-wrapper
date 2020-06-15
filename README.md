@@ -15,6 +15,8 @@ Corab](https://colab.research.google.com/)).
 
 # Installation
 
+You can install from
+[PyPI](https://pypi.org/project/gym-notebook-wrapper/) with `pip install gym-notebook-wrapper`
 
 
 # Usage
