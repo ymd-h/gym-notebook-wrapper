@@ -40,12 +40,12 @@ class Notebook(VirtualDisplay):
 
         self._img = None
 
-    def render(self,mode=None):
+    def render(self,mode=None,**kwargs):
         """
         Render environment on Notebook
         """
         display.clear_output(wait=True)
-        _img = self.env.render(mode='rgb_array')
+        _img = self.env.render(mode='rgb_array',**kwargs)
         if self._img is None:
             self._img = plt.imshow(_img)
         else:
