@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name="gym-notebook-wrapper",
+      author="Yamada Hiroyuki",
       version="0.0.1",
       install_requires=["gym","matplotlib","pyvirtualdisplay","ipython"],
       packages=["gnwrapper"],
