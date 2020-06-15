@@ -42,7 +42,7 @@ class Notebook(VirtualDisplay):
 
     def render(self,mode=None,**kwargs):
         """
-        Render environment on Notebook
+        Render the environment on Notebook
         """
         display.clear_output(wait=True)
         _img = self.env.render(mode='rgb_array',**kwargs)
