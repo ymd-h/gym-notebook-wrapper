@@ -21,7 +21,7 @@ class VirtualDisplay(Wrapper):
             self._display = Display(visible=0, size=size)
             self._display.start()
 
-class NotebookWrapper(VirtualDisplay):
+class Notebook(VirtualDisplay):
     """
     Wrapper for running/rendering OpenAI gym environment on Notebook
     """
