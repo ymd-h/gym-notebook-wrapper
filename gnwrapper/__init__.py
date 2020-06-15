@@ -45,10 +45,11 @@ class Notebook(VirtualDisplay):
         Render environment on Notebook
         """
         display.clear_output(wait=True)
+        _img = self.env.render(mode='rgb_array')
         if self._img is None:
-            self._img = plt.imshow(self.env.render(mode='rgb_array'))
+            self._img = plt.imshow(_img)
         else:
-            self._img.set_data(self.env.render(mode='rgb_array'))
+            self._img.set_data(_img)
 
         plt.axis('off')
         display.display(plt.gcf())
