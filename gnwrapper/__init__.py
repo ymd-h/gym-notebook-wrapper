@@ -21,7 +21,7 @@ class VirtualDisplay(Wrapper):
             self._display = Display(visible=0, size=size)
             self._display.start()
 
-class NotebookWrapper(Wrapper):
+class NotebookWrapper(VirtualDisplay):
     """
     Wrapper for running/rendering OpenAI gym environment on Notebook
     """
@@ -36,15 +36,9 @@ class NotebookWrapper(Wrapper):
         size : array-like, optional
             Virtual display size, whose default is (1024,768)
         """
-        super().__init__(env)
+        super().__init__(env,size)
 
         self._img = None
-
-        self._display = None
-        # To avoid starting multiple virtual display
-        if not os.getenv("DISPLAY",None):
-            self._display = Display(visible=0, size=size)
-            self._display.start()
 
     def render(self,mode=None):
         """
