@@ -16,6 +16,9 @@ unit_test:
     - pip install coverage unittest-xml-reporting
   script:
     - pip install .
+    - coverage run -m xmlrunner test/gnwrapper.py
+    - coverage combine
+    - coverage report
   cache:
     paths:
       - "$CI_PROJECT_DIR/.pip"
