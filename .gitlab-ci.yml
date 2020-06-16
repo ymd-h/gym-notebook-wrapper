@@ -1,0 +1,28 @@
+variables: &global-variables
+  GIT_DEPTH: 10
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip"
+
+
+stages:
+  - test
+  - pypi
+
+
+upload_pypi:
+  image: python:latest
+  stage: pypi
+  before_script:
+    - pip install twine
+  script:
+    - pip wheel --no-deps .
+    - twine upload gym-notebook-wrapper-*.whl
+  only:
+    - tags
+  except:
+    - branches
+    - schedules
+  cache:
+    paths:
+      - "$CI_PROJECT_DIR/.pip"
+    key: "${CI_PROJECT_PATH}-PYPI"
+
