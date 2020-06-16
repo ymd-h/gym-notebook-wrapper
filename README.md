@@ -39,7 +39,7 @@ for _ in range(1000):
 
     obs = next_obs
     if done:
-	    obs = env.reset()
+        obs = env.reset()
 ```
 
 # Limitation
