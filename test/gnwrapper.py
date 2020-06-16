@@ -15,5 +15,7 @@ class TestAnimation(unittest.TestCase):
             if d:
                 env.reset()
 
+        del env
+
 if __name__ == "__main__":
     unittest.main()
