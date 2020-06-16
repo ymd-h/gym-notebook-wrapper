@@ -16,9 +16,15 @@ class VirtualDisplay(Wrapper):
         """
         super().__init__(env)
         self._display = None
+        self._ensure_display()
+
+    def _ensure_display(self):
+        """
+        Ensure to start virtual display
+        """
         # To avoid starting multiple virtual display
         if not os.getenv("DISPLAY",None):
-            self._display = Display(visible=0, size=size)
+            self._display = self._display or Display(visible=0, size=size)
             self._display.start()
 
     def __del__(self):
