@@ -15,6 +15,7 @@ class VirtualDisplay(Wrapper):
         Wrapping environment and start Xvfb
         """
         super().__init__(env)
+        self.size = size
         self._display = None
         self._ensure_display()
 
@@ -24,7 +25,7 @@ class VirtualDisplay(Wrapper):
         """
         # To avoid starting multiple virtual display
         if not os.getenv("DISPLAY",None):
-            self._display = self._display or Display(visible=0, size=size)
+            self._display = self._display or Display(visible=0, size=self.size)
             self._display.start()
 
     def render(self,mode=None,**kwargs):
