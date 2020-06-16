@@ -53,3 +53,42 @@ class Animation(VirtualDisplay):
 
         plt.axis('off')
         display.display(plt.gcf())
+
+class LoopAnimation(VirtualDisplay):
+    """
+    Wrapper for OpenAI Gym to display loop animation on Notebook
+    """
+    def __init__(self,env,size=(1024, 768)):
+        """
+        Wrap environment for Notebook
+
+        Parameters
+        ----------
+        env : gym.Env
+            Environment to be wrapperd
+        size : array-like, optional
+            Virtual display size, whose default is (1024, 768)
+        """
+        super().__init__(env,size)
+
+        self._img = []
+
+    def render(self,mode=None,**kwargs):
+        """
+        Store rendered image into internal buffer
+        """
+        self._img.applend(self.env.render(mode='rgb_array',**kwargs))
+
+    def display(self,*,dpi=72,interval=50):
+        """
+        Display saved images as loop animation
+        """
+        plt.figure(figsize=(self._img[0].shape[1]/dpi,
+                            self._img[0].shape[0]/dpi),
+                   dpi=dpi)
+        patch = plt.imshow(self._img[0])
+        plt.axis=('off')
+        animate = lambda i: patch.set_data(self._img[i])
+        ani = animation.FuncAnimation(plt.gcf(),animate,
+                                      frames=len(self._img),interval=interval)
+        display.display(display.HTML(ani.to_jshtml()))
