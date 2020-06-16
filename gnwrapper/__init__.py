@@ -64,6 +64,16 @@ class Animation(VirtualDisplay):
     def render(self,mode=None,**kwargs):
         """
         Render the environment on Notebook
+
+        Parameters
+        ----------
+        mode : str
+            If "rgb_array", return display image
+
+        Returns
+        -------
+        img : numpy.ndarray or None
+            Rendering image when mode == "rgb_array"
         """
         display.clear_output(wait=True)
         _img = self.env.render(mode='rgb_array',**kwargs)
@@ -100,6 +110,16 @@ class LoopAnimation(VirtualDisplay):
     def render(self,mode=None,**kwargs):
         """
         Store rendered image into internal buffer
+
+        Parameters
+        ----------
+        mode : str
+            If "rgb_array", return display image
+
+        Returns
+        -------
+        img : numpy.ndarray or None
+            Rendering image when mode == "rgb_array"
         """
         self._img.applend(self.env.render(mode='rgb_array',**kwargs))
 
