@@ -46,3 +46,9 @@ for _ in range(1000):
 
 - Calling `render()` method delete the other output for the same cell.
 - The output image is shown only once.
+
+# Notes
+
+`gnwrapper.Animation` inherits from `gym.Wrapper`, so that it can
+access any fields or mothods of `gym.Env` and `gym.Wrapper`
+(e.g. `action_space`).
