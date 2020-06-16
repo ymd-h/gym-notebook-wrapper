@@ -32,7 +32,7 @@ upload_pypi:
     - pip install twine wheel
   script:
     - pip wheel --no-deps .
-    - twine upload gym-notebook-wrapper-*.whl
+    - twine upload gym_notebook_wrapper-*.whl
   only:
     - tags
   except:
