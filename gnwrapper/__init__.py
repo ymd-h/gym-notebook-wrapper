@@ -21,6 +21,14 @@ class VirtualDisplay(Wrapper):
             self._display = Display(visible=0, size=size)
             self._display.start()
 
+    def __del__(self):
+        """
+        Stop virtual display
+        """
+        if self._display:
+            self._display.stop()
+            self._display = None
+
 class Animation(VirtualDisplay):
     """
     Wrapper for running/rendering OpenAI Gym environment on Notebook
