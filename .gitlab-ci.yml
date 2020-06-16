@@ -9,7 +9,7 @@ stages:
 
 
 upload_pypi:
-  image: python: latest
+  image: python:latest
   stage: pypi
   before_script:
     - pip install twine
