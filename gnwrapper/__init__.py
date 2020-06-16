@@ -75,6 +75,9 @@ class Animation(VirtualDisplay):
         plt.axis('off')
         display.display(plt.gcf())
 
+        if mode == 'rgb_array':
+            return _img
+
 class LoopAnimation(VirtualDisplay):
     """
     Wrapper for OpenAI Gym to display loop animation on Notebook
@@ -99,6 +102,9 @@ class LoopAnimation(VirtualDisplay):
         Store rendered image into internal buffer
         """
         self._img.applend(self.env.render(mode='rgb_array',**kwargs))
+
+        if mode == 'rgb_array':
+            return self._img[-1]
 
     def display(self,*,dpi=72,interval=50):
         """
