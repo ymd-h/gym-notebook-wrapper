@@ -23,7 +23,7 @@ class VirtualDisplay(Wrapper):
 
 class Animation(VirtualDisplay):
     """
-    Wrapper for running/rendering OpenAI gym environment on Notebook
+    Wrapper for running/rendering OpenAI Gym environment on Notebook
     """
     def __init__(self,env,size=(1024, 768)):
         """
