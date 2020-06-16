@@ -21,9 +21,16 @@ You can install from
 
 # Usage
 
+Two classes are implemented in `gnrwapper` module in this
+gym-notebook-wrapper package.
+
+## Simple One Shot Animation
+
 Wrap `gym.Env` class with `gnwrapper.Animation`. That's all! The
 `render()` method shows the environment on its output. An example code
 is following;
+
+### Code
 
 ``` python
 import gnwrapper
@@ -42,10 +49,13 @@ for _ in range(1000):
         obs = env.reset()
 ```
 
-# Limitation
+### Limitation
 
 - Calling `render()` method delete the other output for the same cell.
 - The output image is shown only once.
+
+
+
 
 # Notes
 
