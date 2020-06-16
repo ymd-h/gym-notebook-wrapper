@@ -21,4 +21,8 @@ upload_pypi:
   except:
     - branches
     - schedules
+  cache:
+    paths:
+      - "$CI_PROJECT_DIR/.pip"
+    key: "${CI_PROJECT_PATH}-PYPI"
 
