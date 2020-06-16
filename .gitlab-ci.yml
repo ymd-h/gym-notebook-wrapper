@@ -13,6 +13,7 @@ unit_test:
   before_script:
     - apt update
     - apt install xvfb python-opengl
+    - pip install coverage unittest-xml-reporting
   script:
     - pip install .
   cache:
