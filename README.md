@@ -55,10 +55,42 @@ for _ in range(1000):
 - The output image is shown only once.
 
 
+## Loop Animation
+
+Wrap `gym.Env` class with `gnwrapper.LoopAnimation`. This wrapper
+stores display image when `render()` methos is called and shows the
+loop animation by `display(dpi=72,interval=50)` methos.
+
+### Code
+
+``` python
+import gnwrapper
+import gym
+
+env = gnwrapper.LoopAnimation(gym.make('CartPole-v1'))
+
+obs = env.reset()
+
+for _ in range(100):
+    next_obs, reward, done, info = env.step(env.action_space.sample())
+    env.render()
+
+    obs = next_obs
+    if done:
+        obs = env.reset()
+
+env.display()
+```
+
+
+### Limitation
+
+- Require a lot of memory to store and display large steps of display
+  - Can raise memory error
 
 
 # Notes
 
-`gnwrapper.Animation` inherits from `gym.Wrapper`, so that it can
-access any fields or mothods of `gym.Env` and `gym.Wrapper`
-(e.g. `action_space`).
+`gnwrapper.Animation` and `gnwrapper.LoopAnimation` inherit from
+`gym.Wrapper`, so that it can access any fields or mothods of
+`gym.Env` and `gym.Wrapper` (e.g. `action_space`).
