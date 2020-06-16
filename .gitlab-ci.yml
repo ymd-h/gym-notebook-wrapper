@@ -25,7 +25,7 @@ upload_pypi:
   image: python:latest
   stage: pypi
   before_script:
-    - pip install twine
+    - pip install twine wheel
   script:
     - pip wheel --no-deps .
     - twine upload gym-notebook-wrapper-*.whl
