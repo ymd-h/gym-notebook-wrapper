@@ -15,6 +15,7 @@ class VirtualDisplay(Wrapper):
         Wrapping environment and start Xvfb
         """
         super().__init__(env)
+        self.size = size
         self._display = None
         self._ensure_display()
 
@@ -24,7 +25,7 @@ class VirtualDisplay(Wrapper):
         """
         # To avoid starting multiple virtual display
         if not os.getenv("DISPLAY",None):
-            self._display = self._display or Display(visible=0, size=size)
+            self._display = self._display or Display(visible=0, size=self.size)
             self._display.start()
 
     def render(self,mode=None,**kwargs):
@@ -64,6 +65,16 @@ class Animation(VirtualDisplay):
     def render(self,mode=None,**kwargs):
         """
         Render the environment on Notebook
+
+        Parameters
+        ----------
+        mode : str
+            If "rgb_array", return display image
+
+        Returns
+        -------
+        img : numpy.ndarray or None
+            Rendering image when mode == "rgb_array"
         """
         display.clear_output(wait=True)
         _img = self.env.render(mode='rgb_array',**kwargs)
@@ -74,6 +85,9 @@ class Animation(VirtualDisplay):
 
         plt.axis('off')
         display.display(plt.gcf())
+
+        if mode == 'rgb_array':
+            return _img
 
 class LoopAnimation(VirtualDisplay):
     """
@@ -97,8 +111,21 @@ class LoopAnimation(VirtualDisplay):
     def render(self,mode=None,**kwargs):
         """
         Store rendered image into internal buffer
+
+        Parameters
+        ----------
+        mode : str
+            If "rgb_array", return display image
+
+        Returns
+        -------
+        img : numpy.ndarray or None
+            Rendering image when mode == "rgb_array"
         """
         self._img.applend(self.env.render(mode='rgb_array',**kwargs))
+
+        if mode == 'rgb_array':
+            return self._img[-1]
 
     def display(self,*,dpi=72,interval=50):
         """
