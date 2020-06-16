@@ -27,6 +27,13 @@ class VirtualDisplay(Wrapper):
             self._display = self._display or Display(visible=0, size=size)
             self._display.start()
 
+    def render(self,mode=None,**kwargs):
+        """
+        Render environment
+        """
+        self._ensure_display()
+        return self.env.render(mode='rgb_array',**kwargs)
+
     def __del__(self):
         """
         Stop virtual display
