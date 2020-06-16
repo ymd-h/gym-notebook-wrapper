@@ -16,10 +16,31 @@ class VirtualDisplay(Wrapper):
         """
         super().__init__(env)
         self._display = None
+        self._ensure_display()
+
+    def _ensure_display(self):
+        """
+        Ensure to start virtual display
+        """
         # To avoid starting multiple virtual display
         if not os.getenv("DISPLAY",None):
-            self._display = Display(visible=0, size=size)
+            self._display = self._display or Display(visible=0, size=size)
             self._display.start()
+
+    def render(self,mode=None,**kwargs):
+        """
+        Render environment
+        """
+        self._ensure_display()
+        return self.env.render(mode='rgb_array',**kwargs)
+
+    def __del__(self):
+        """
+        Stop virtual display
+        """
+        if self._display:
+            self._display.stop() # This remove "DISPLAY" environment, too.
+            self._display = None
 
 class Animation(VirtualDisplay):
     """
