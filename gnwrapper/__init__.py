@@ -115,7 +115,7 @@ class LoopAnimation(VirtualDisplay):
         img : numpy.ndarray or None
             Rendering image when mode == "rgb_array"
         """
-        self._img.applend(self.env.render(mode='rgb_array',**kwargs))
+        self._img.append(self.env.render(mode='rgb_array',**kwargs))
 
         if mode == 'rgb_array':
             return self._img[-1]
