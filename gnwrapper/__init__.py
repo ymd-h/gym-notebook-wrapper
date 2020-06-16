@@ -26,7 +26,7 @@ class VirtualDisplay(Wrapper):
         Stop virtual display
         """
         if self._display:
-            self._display.stop()
+            self._display.stop() # This remove "DISPLAY" environment, too.
             self._display = None
 
 class Animation(VirtualDisplay):
