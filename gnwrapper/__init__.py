@@ -35,13 +35,6 @@ class VirtualDisplay(Wrapper):
         self._ensure_display()
         return self.env.render(mode='rgb_array',**kwargs)
 
-    def __del__(self):
-        """
-        Stop virtual display
-        """
-        if self._display:
-            self._display.stop() # This remove "DISPLAY" environment, too.
-            self._display = None
 
 class Animation(VirtualDisplay):
     """
