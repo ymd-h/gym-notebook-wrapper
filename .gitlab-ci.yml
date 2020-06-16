@@ -7,6 +7,19 @@ stages:
   - test
   - pypi
 
+unit_test:
+  image: python:latest
+  stage: test
+  before_script:
+    - apt update
+    - apt install xvfb python-opengl
+  script:
+    - pip install .
+  cache:
+    paths:
+      - "$CI_PROJECT_DIR/.pip"
+    key: "${CI_PROJECT_PATH}-TEST"
+
 
 upload_pypi:
   image: python:latest
