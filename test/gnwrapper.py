@@ -2,9 +2,9 @@ import unittest
 import gnwrapper
 import gym
 
-class TestNotebookAnimation(unittest.TestCase):
+class TestAnimation(unittest.TestCase):
     def test_render(self):
-        env = gnwrapper.Notebook(gym.make("CartPole-v1"))
+        env = gnwrapper.Animation(gym.make("CartPole-v1"))
 
         env.reset()
 

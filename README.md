@@ -21,7 +21,7 @@ You can install from
 
 # Usage
 
-Wrap `gym.Env` class with `gnwrapper.Notebook`. That's all! The
+Wrap `gym.Env` class with `gnwrapper.Animation`. That's all! The
 `render()` method shows the environment on its output. An example code
 is following;
 
@@ -29,7 +29,7 @@ is following;
 import gnwrapper
 import gym
 
-env = gnwrapper.Notebook(gym.make('CartPole-v1'))
+env = gnwrapper.Animation(gym.make('CartPole-v1'))
 
 obs = env.reset()
 
