@@ -5,7 +5,7 @@ import gnwrapper
 import gym
 
 
-class VirtualDisplay(unittest.TestCase):
+class TestVirtualDisplay(unittest.TestCase):
     def test_init(self):
         env = gnwrapper.VirtualDisplay(gym.make("CartPole-v1"))
         self.assertIsNotNone(os.getenv("DISPLAY"))
