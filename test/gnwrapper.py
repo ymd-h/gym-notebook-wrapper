@@ -3,7 +3,7 @@ import gnwrapper
 import gym
 
 
-class VirtualDisplay(self):
+class VirtualDisplay(unittest.TestCase):
     def test_init(self):
         env = gnwrapper.VirtualDisplay(gym.make("CartPole-v1"))
         self.assertNotEqual(os.getenv("DISPLAY"),None)
