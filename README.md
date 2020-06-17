@@ -1,5 +1,12 @@
 # Gym-Notebook-Wrapper
 
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/gym-notebook-wrapper)
+![PyPI](https://img.shields.io/pypi/v/gym-notebook-wrapper)
+![PyPI - Status](https://img.shields.io/pypi/status/gym-notebook-wrapper)
+![PyPI - License](https://img.shields.io/pypi/l/gym-notebook-wrapper)
+
+
+
 Gym-Notebook-Wrapper provides small wrappers for running and rendering
 [OpenAI Gym](https://github.com/openai/gym) on [Jupyter
 Notebook](https://jupyter.org/) or similar (e.g. [Google
