@@ -3,6 +3,7 @@ import os
 from gym import Wrapper
 from IPython import display
 import matplotlib.pyplot as plt
+from matplotlib import animation
 from pyvirtualdisplay import Display
 
 
