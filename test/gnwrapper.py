@@ -5,7 +5,7 @@ import gym
 
 class VirtualDisplay(self):
     def test_init(self):
-        env.gnwrapper.VirtualDisplay(gym.make("CartPole-v1"))
+        env = gnwrapper.VirtualDisplay(gym.make("CartPole-v1"))
         self.assertNotEqual(os.getenv("DISPLAY"),None)
 
     def test_render_return(self):
