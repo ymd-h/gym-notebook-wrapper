@@ -12,6 +12,7 @@ class VirtualDisplay(unittest.TestCase):
 
     def test_render_return(self):
         env = gnwrapper.VirtualDisplay(gym.make("CartPole-v1"))
+        env.reset()
         self.assertNotEqual(env.render(),None)
 
 
