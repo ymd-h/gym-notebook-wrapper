@@ -28,7 +28,7 @@ You can install from
 
 # Usage
 
-Two classes are implemented in `gnrwapper` module in this
+Two classes are implemented in `gnwrapper` module in this
 gym-notebook-wrapper package.
 
 ## Simple One Shot Animation
