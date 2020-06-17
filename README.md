@@ -101,3 +101,8 @@ env.display()
 `gnwrapper.Animation` and `gnwrapper.LoopAnimation` inherit from
 `gym.Wrapper`, so that it can access any fields or mothods of
 `gym.Env` and `gym.Wrapper` (e.g. `action_space`).
+
+
+# Links
+
+- [Repository](https://gitlab.com/ymd_h/gym-notebook-wrapper)
