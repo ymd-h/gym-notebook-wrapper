@@ -4,16 +4,37 @@ variables: &global-variables
 
 
 stages:
+  - build_image
   - test
   - pypi
 
+
+.docker_build_base: &docker_build
+  image: docker:latest
+  stage: build_image
+  services:
+    - docker:dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/build:latest || true
+    - docker build --pull=true --cache-from $CI_REGISTRY_IMAGE/build:latest -t $CI_REGISTRY_IMAGE/build:latest .
+    - docker push $CI_REGISTRY_IMAGE/build:latest
+
+docker_build_schedule:
+  <<: *docker_build
+  only:
+    - schedules
+
+docker_build_manual:
+  <<: *docker_build
+  when: manual
+  except:
+    - schedules
+
+
 unit_test:
-  image: python:latest
+  image: $CI_REGISTRY_IMAGE/build:latest
   stage: test
-  before_script:
-    - apt update
-    - apt install -y xvfb python-opengl ffmpeg
-    - pip install coverage unittest-xml-reporting
   script:
     - pip install .
     - coverage run -m xmlrunner test/gnwrapper.py
@@ -26,10 +47,8 @@ unit_test:
 
 
 upload_pypi:
-  image: python:latest
+  image: $CI_REGISTRY_IMAGE/build:latest
   stage: pypi
-  before_script:
-    - pip install twine wheel
   script:
     - pip wheel --no-deps .
     - twine upload gym_notebook_wrapper-*.whl
@@ -42,4 +61,3 @@ upload_pypi:
     paths:
       - "$CI_PROJECT_DIR/.pip"
     key: "${CI_PROJECT_PATH}-PYPI"
-
