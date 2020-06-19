@@ -40,10 +40,6 @@ unit_test:
     - coverage run -m xmlrunner test/gnwrapper.py
     - coverage combine
     - coverage report
-  cache:
-    paths:
-      - "$CI_PROJECT_DIR/.pip"
-    key: "${CI_PROJECT_PATH}-TEST"
 
 
 upload_pypi:
@@ -57,7 +53,3 @@ upload_pypi:
   except:
     - branches
     - schedules
-  cache:
-    paths:
-      - "$CI_PROJECT_DIR/.pip"
-    key: "${CI_PROJECT_PATH}-PYPI"
