@@ -1,6 +1,9 @@
+import base64
+import io
 import os
 
 from gym import Wrapper
+from gym.wrappers import Monitor as _monitor
 from IPython import display
 import matplotlib.pyplot as plt
 from matplotlib import animation
@@ -134,3 +137,22 @@ class LoopAnimation(VirtualDisplay):
         ani = animation.FuncAnimation(plt.gcf(),animate,
                                       frames=len(self._img),interval=interval)
         display.display(display.HTML(ani.to_jshtml()))
+
+class Monitor(_monitor):
+    def __init__(self,env,size=(1024, 768),*args,**kwargs):
+        VirtualDisplay(env,size)
+        super().__init__(env,*args,**kwargs)
+
+    def display(self):
+        """
+        Display saved all movies
+        """
+        for f in self.videos:
+            video = io.open(f[0], "r+b").read()
+            encoded = base64.b64encode(video)
+
+            display.display(display.HTML(data="""
+            <video alt="test" controls>
+            <source src="data:video/mp4;base64,{0}" type="video/mp4" />
+            </video>
+            """.format(encoded.decode('ascii'))))

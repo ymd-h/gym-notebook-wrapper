@@ -12,7 +12,7 @@ unit_test:
   stage: test
   before_script:
     - apt update
-    - apt install -y xvfb python-opengl
+    - apt install -y xvfb python-opengl ffmpeg
     - pip install coverage unittest-xml-reporting
   script:
     - pip install .
