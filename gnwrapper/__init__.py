@@ -3,7 +3,7 @@ import io
 import os
 
 from gym import Wrapper
-from gym.wrappers import Monitor
+from gym.wrappers import Monitor as _monitor
 from IPython import display
 import matplotlib.pyplot as plt
 from matplotlib import animation
@@ -138,10 +138,10 @@ class LoopAnimation(VirtualDisplay):
                                       frames=len(self._img),interval=interval)
         display.display(display.HTML(ani.to_jshtml()))
 
-class Monitor(VirtualDisplay,Monitor):
+class Monitor(_monitor):
     def __init__(self,env,size=(1024, 768),*args,**kwargs):
-        super(VirtualDisplay,self).__init__(size)
-        sudper(Monitor,self).__init__(env,*args,**kwargs)
+        VirtualDisplay(size)
+        sudper().__init__(env,*args,**kwargs)
 
     def display(self):
         """
