@@ -141,7 +141,7 @@ class LoopAnimation(VirtualDisplay):
 class Monitor(_monitor):
     def __init__(self,env,size=(1024, 768),*args,**kwargs):
         VirtualDisplay(env,size)
-        sudper().__init__(env,*args,**kwargs)
+        super().__init__(env,*args,**kwargs)
 
     def display(self):
         """
