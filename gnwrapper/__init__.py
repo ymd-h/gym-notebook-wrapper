@@ -139,9 +139,9 @@ class LoopAnimation(VirtualDisplay):
         display.display(display.HTML(ani.to_jshtml()))
 
 class Monitor(_monitor):
-    def __init__(self,env,size=(1024, 768),*args,**kwargs):
+    def __init__(self,env,directory,size=(1024, 768),*args,**kwargs):
         VirtualDisplay(env,size)
-        super().__init__(env,*args,**kwargs)
+        super().__init__(env,directory,*args,**kwargs)
 
     def display(self):
         """
