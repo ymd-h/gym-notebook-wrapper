@@ -28,7 +28,7 @@ You can install from
 
 ## 3. Usage
 
-Two classes are implemented in `gnwrapper` module in this
+Three classes are implemented in `gnwrapper` module in this
 gym-notebook-wrapper package.
 
 ### 3.1 Simple One Shot Animation
@@ -95,6 +95,34 @@ env.display()
 - Require a lot of memory to store and display large steps of display
   - Can raise memory error
 
+
+### 3.3 Movie Animation
+
+Wrap `gum.Env` class with `gnwrapper.Monitor`. This wrapper inherits
+`gym.wrappers.Monitor` and implements `display()` method for embedding
+mp4 movie into Notebook.
+
+#### 3.3.1 Code
+
+``` python
+import gnwrapper
+import gym
+
+env = gnwrapper.Monitor(gym.make('CartPole-v1'),directory="./")
+
+o = env.reset()
+
+for _ in range(100):
+    o, r, d, i = env.step(env.action_space.sample())
+    if d:
+        env.reset()
+
+env.display()
+```
+
+#### 3.3.2 Limitation
+
+- Require disk space for save movie
 
 ## 4. Notes
 
