@@ -138,9 +138,10 @@ class LoopAnimation(VirtualDisplay):
                                       frames=len(self._img),interval=interval)
         display.display(display.HTML(ani.to_jshtml()))
 
-class Monitor(VirtualDisplay):
-    def __init__(self,env,**kwargs):
-        super().__init__(env,**kwargs)
+class Monitor(VirtualDisplay,Monitor):
+    def __init__(self,env,size=(1024, 768),*args,**kwargs):
+        VirtualDisplay.__init__(self,size)
+        Monitor.__init__(self,env,*args,**kwargs)
 
     def display(self):
         """
