@@ -46,7 +46,7 @@ class TestLoopAnimation(unittest.TestCase):
 
 class TestMonitor(unittest.TestCase):
     def test_display(self):
-        env = gnwrapper.Monitor(gym.make('CartPole-v1'),"./")
+        env = gnwrapper.Monitor(gym.make('CartPole-v1'),directory="./")
 
         env.reset()
 
