@@ -10,7 +10,7 @@
 Gym-Notebook-Wrapper provides small wrappers for running and rendering
 [OpenAI Gym](https://github.com/openai/gym) on [Jupyter
 Notebook](https://jupyter.org/) or similar (e.g. [Google
-Corab](https://colab.research.google.com/)).
+Colab](https://colab.research.google.com/)).
 
 ## 1. Requirement
 
