@@ -151,6 +151,7 @@ class Monitor(_monitor):
             video = io.open(f[0], "r+b").read()
             encoded = base64.b64encode(video)
 
+            display.display(os.path.basename(f[0]))
             display.display(display.HTML(data="""
             <video alt="test" controls>
             <source src="data:video/mp4;base64,{0}" type="video/mp4" />
