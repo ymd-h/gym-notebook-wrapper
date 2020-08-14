@@ -141,6 +141,16 @@ class LoopAnimation(VirtualDisplay):
         display.display(display.HTML(ani.to_jshtml()))
 
 class Monitor(_monitor):
+    """
+    Monitor wrapper to store images as videos.
+
+    This class is a shin wrapper for `gym.wrappers.Monitor`. This class also
+    have a method `display`, which shows recorded movies on Notebook.
+
+    See Also
+    --------
+    gym.wrappers.Monitor : https://github.com/openai/gym/blob/master/gym/wrappers/monitor.py
+    """
     def __init__(self,env,directory: Optional[str]=None,size=(1024, 768),
                  *args,**kwargs):
         """
