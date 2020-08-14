@@ -134,4 +134,4 @@ env.display()
 ## 5. Links
 
 - [Repository](https://gitlab.com/ymd_h/gym-notebook-wrapper)
-- [GitHub Mirror](https://github.com/yamada-github-account/gym-notebook-wrapper)
+- [GitHub Mirror](https://github.com/ymd-h/gym-notebook-wrapper)
