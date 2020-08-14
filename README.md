@@ -102,6 +102,9 @@ Wrap `gum.Env` class with `gnwrapper.Monitor`. This wrapper inherits
 `gym.wrappers.Monitor` and implements `display()` method for embedding
 mp4 movie into Notebook.
 
+If you call `display(reset=True)`, the video list is cleared and the
+next `display()` method shows only new videos.
+
 #### 3.3.1 Code
 
 ``` python
