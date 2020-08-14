@@ -1,5 +1,6 @@
 import os
 import unittest
+import re
 
 import gnwrapper
 import gym
@@ -73,6 +74,21 @@ class TestMonitor(unittest.TestCase):
         env.display(reset=True)
         self.assertEqual(len(env.videos),0)
 
+    def test_default_directory(self):
+        env = gnwrapper.Monitor(gym.make('CartPole-v1'))
+
+        env.reset()
+
+        for _ in range(100):
+            o, r, d, i = env.step(env.action_space.sample())
+
+            if d:
+                env.reset()
+
+        for f in env.videos:
+            with self.subTest(file=f[0]):
+                self.assertIsNotNone(re.search(r"[0-9]{8}-[0-9]{6}",f[0]))
+        env.display()
 
 if __name__ == "__main__":
     unittest.main()
