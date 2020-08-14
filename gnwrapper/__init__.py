@@ -1,4 +1,5 @@
 import base64
+import datetime
 import io
 import os
 
@@ -139,7 +140,10 @@ class LoopAnimation(VirtualDisplay):
         display.display(display.HTML(ani.to_jshtml()))
 
 class Monitor(_monitor):
-    def __init__(self,env,directory,size=(1024, 768),*args,**kwargs):
+    def __init__(self,env,directory=None,size=(1024, 768),*args,**kwargs):
+        if directory is None:
+            directory = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
         VirtualDisplay(env,size)
         super().__init__(env,directory,*args,**kwargs)
 
