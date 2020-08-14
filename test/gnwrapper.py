@@ -58,5 +58,21 @@ class TestMonitor(unittest.TestCase):
 
         env.display()
 
+    def test_reset_videos(self):
+        env = gnwrapper.Monitor(gym.make('CartPole-v1'),
+                                directory="./test_reset_videos/")
+
+        env.reset()
+        for _ in range(100):
+            o, r, d, i = env.step(env.action_space.sample())
+
+            if d:
+                env.reset()
+                self.assertNotEqual(len(env.videos),0)
+
+        env.display(reset=True)
+        self.assertEqual(len(env.videos),0)
+
+
 if __name__ == "__main__":
     unittest.main()
