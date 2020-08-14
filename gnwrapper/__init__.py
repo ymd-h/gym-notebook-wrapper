@@ -143,6 +143,15 @@ class LoopAnimation(VirtualDisplay):
 class Monitor(_monitor):
     def __init__(self,env,directory: Optional[str]=None,size=(1024, 768),
                  *args,**kwargs):
+        """
+        Initialize Monitor class
+
+        Parameters
+        ----------
+        directory : str, optional
+            Directory to store output movies. When the value is `None`,
+            which is default, "%Y%m%d-%H%M%S" is used for directory.
+        """
         if directory is None:
             directory = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
