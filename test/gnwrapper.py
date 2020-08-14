@@ -62,6 +62,7 @@ class TestMonitor(unittest.TestCase):
         env = gnwrapper.Monitor(gym.make('CartPole-v1'),
                                 directory="./test_reset_videos/")
 
+        env.reset()
         for _ in range(100):
             o, r, d, i = env.step(env.action_space.sample())
 
