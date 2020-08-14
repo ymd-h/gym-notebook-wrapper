@@ -2,6 +2,7 @@ import base64
 import datetime
 import io
 import os
+from typing import Optional
 
 from gym import Wrapper
 from gym.wrappers import Monitor as _monitor
@@ -140,7 +141,8 @@ class LoopAnimation(VirtualDisplay):
         display.display(display.HTML(ani.to_jshtml()))
 
 class Monitor(_monitor):
-    def __init__(self,env,directory=None,size=(1024, 768),*args,**kwargs):
+    def __init__(self,env,directory: Optional[str]=None,size=(1024, 768),
+                 *args,**kwargs):
         if directory is None:
             directory = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
