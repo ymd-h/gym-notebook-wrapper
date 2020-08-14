@@ -87,7 +87,7 @@ class TestMonitor(unittest.TestCase):
 
         for f in env.videos:
             with self.subTest(file=f[0]):
-                self.assertNotNone(re.search(r"[0-9]{8}-[0-9]{6}",f[0]))
+                self.assertIsNotNone(re.search(r"[0-9]{8}-[0-9]{6}",f[0]))
         env.display()
 
 if __name__ == "__main__":
