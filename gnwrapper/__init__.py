@@ -143,9 +143,15 @@ class Monitor(_monitor):
         VirtualDisplay(env,size)
         super().__init__(env,directory,*args,**kwargs)
 
-    def display(self):
+    def display(self,reset: bool=False):
         """
         Display saved all movies
+
+        Parameters
+        ----------
+        reset : bool, optional
+            When `True`, clear current video list. This does not delete movie files.
+            The default value is `False`, which keeps video list.
         """
         for f in self.videos:
             video = io.open(f[0], "r+b").read()
@@ -157,3 +163,6 @@ class Monitor(_monitor):
             <source src="data:video/mp4;base64,{0}" type="video/mp4" />
             </video>
             """.format(encoded.decode('ascii'))))
+
+        if reset:
+            self.videos = []
