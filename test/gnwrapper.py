@@ -114,5 +114,15 @@ class TestMonitor(unittest.TestCase):
             with self.subTest(file=f[0]):
                 self.assertTrue(os.path.exists(f[0]))
 
+        # Can run normally after
+        env.reset()
+        for _ in range(100):
+            o, r, d, i = env.step(env.action_space.sample())
+
+            if d:
+                env.reset()
+
+        env.display()
+
 if __name__ == "__main__":
     unittest.main()
