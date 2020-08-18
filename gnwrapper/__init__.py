@@ -168,6 +168,17 @@ class Monitor(_monitor):
         VirtualDisplay(env,size)
         super().__init__(env,directory,*args,**kwargs)
 
+    def reset(self,**kwargs):
+        """
+        Reset Environment
+        """
+        if self.stats_recorder and not self.stats_recorder.done:
+            # StatsRecorder requires `done=True` before `reset()`
+            self.stats_recorder.done = True
+            self.stats_recorder.save_complete()
+
+        return super().reset(**kwargs)
+
     def display(self,reset: bool=False):
         """
         Display saved all movies
