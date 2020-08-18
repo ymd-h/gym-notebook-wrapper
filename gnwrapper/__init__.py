@@ -182,10 +182,8 @@ class Monitor(_monitor):
         """
 
         # Close current video.
-        _video_enabled = self._video_enabled
-        self._video_enabled = lambda: False # Dummy function
-        self.reset_video_recorder()
-        self._video_enabled = _video_enabled
+        self._close_video_recorder()
+        self.video_recorder = None
         self._flush(force=True)
 
         for f in self.videos:
