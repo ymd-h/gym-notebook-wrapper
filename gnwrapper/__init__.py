@@ -168,9 +168,22 @@ class Monitor(_monitor):
         VirtualDisplay(env,size)
         super().__init__(env,directory,*args,**kwargs)
 
+    def reset(self,**kwargs):
+        """
+        Reset Environment
+        """
+        if self.stats_recorder and not self.stats_recorder.done:
+            # StatsRecorder requires `done=True` before `reset()`
+            self.stats_recorder.done = True
+            self.stats_recorder.save_complete()
+
+        return super().reset(**kwargs)
+
     def display(self,reset: bool=False):
         """
         Display saved all movies
+
+        If video is running, stop and flush the current video then display all.
 
         Parameters
         ----------
@@ -178,6 +191,12 @@ class Monitor(_monitor):
             When `True`, clear current video list. This does not delete movie files.
             The default value is `False`, which keeps video list.
         """
+
+        # Close current video.
+        self._close_video_recorder()
+        self.video_recorder = None
+        self._flush(force=True)
+
         for f in self.videos:
             video = io.open(f[0], "r+b").read()
             encoded = base64.b64encode(video)

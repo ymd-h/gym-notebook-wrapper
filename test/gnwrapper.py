@@ -90,5 +90,40 @@ class TestMonitor(unittest.TestCase):
                 self.assertIsNotNone(re.search(r"[0-9]{8}-[0-9]{6}",f[0]))
         env.display()
 
+    def test_last_video(self):
+        """
+        Check the last video is flushed
+
+        Ref: https://gitlab.com/ymd_h/gym-notebook-wrapper/-/issues/2
+        """
+        env = gnwrapper.Monitor(gym.make('CartPole-v1'),
+                                directory="./test_last_videos/",
+                                video_callable=lambda ep: True)
+        env.reset()
+
+        n_video = 1
+        for _ in range(100):
+            o, r, d, i = env.step(env.action_space.sample())
+
+            if d:
+                env.reset()
+                n_video += 1
+
+        env.display()
+        self.assertEqual(len(env.videos),n_video)
+        for f in env.videos:
+            with self.subTest(file=f[0]):
+                self.assertTrue(os.path.exists(f[0]))
+
+        # Can run normally after
+        env.reset()
+        for _ in range(100):
+            o, r, d, i = env.step(env.action_space.sample())
+
+            if d:
+                env.reset()
+
+        env.display()
+
 if __name__ == "__main__":
     unittest.main()
