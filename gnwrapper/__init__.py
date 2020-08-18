@@ -172,12 +172,23 @@ class Monitor(_monitor):
         """
         Display saved all movies
 
+        If video is running, stop and flush the current video then display all.
+
         Parameters
         ----------
         reset : bool, optional
             When `True`, clear current video list. This does not delete movie files.
             The default value is `False`, which keeps video list.
         """
+
+        # Close current video.
+        if self._video_enabled():
+            _video_enabled = self._video_enabled
+            self._video_enabled = lambda: False # Dummy function
+            self.reset_video_recorder()
+            self._video_enabled = _video_enabled
+            self._flush(force=True)
+
         for f in self.videos:
             video = io.open(f[0], "r+b").read()
             encoded = base64.b64encode(video)
