@@ -182,12 +182,11 @@ class Monitor(_monitor):
         """
 
         # Close current video.
-        if self._video_enabled():
-            _video_enabled = self._video_enabled
-            self._video_enabled = lambda: False # Dummy function
-            self.reset_video_recorder()
-            self._video_enabled = _video_enabled
-            self._flush(force=True)
+        _video_enabled = self._video_enabled
+        self._video_enabled = lambda: False # Dummy function
+        self.reset_video_recorder()
+        self._video_enabled = _video_enabled
+        self._flush(force=True)
 
         for f in self.videos:
             video = io.open(f[0], "r+b").read()
