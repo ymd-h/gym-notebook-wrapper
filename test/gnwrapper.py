@@ -97,7 +97,8 @@ class TestMonitor(unittest.TestCase):
         Ref: https://gitlab.com/ymd_h/gym-notebook-wrapper/-/issues/2
         """
         env = gnwrapper.Monitor(gym.make('CartPole-v1'),
-                                directory="./test_last_videos/")
+                                directory="./test_last_videos/",
+                                video_callable=lambda ep: True)
         env.reset()
 
         n_video = 1
