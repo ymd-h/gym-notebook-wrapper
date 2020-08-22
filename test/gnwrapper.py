@@ -126,8 +126,6 @@ class TestMonitor(unittest.TestCase):
 
         env.display()
 
-    @patch("gym.envs.classic_control.cartpole.CartPoleEnv.step",
-           MagicMock(side_effect=KeyboardInterrupt))
     def test_KeyboardInterrupt(self):
         """
         After KeyboardInterrupt, notebook kernel dies.
@@ -139,8 +137,10 @@ class TestMonitor(unittest.TestCase):
                                 video_callable=lambda ep: True)
         env.reset()
 
-        with self.assertRaises(KeyboardInterrupt):
-            env.step(env.action_space.sample())
+        with patch.object("gym.envs.classic_control.cartpole.CartPoleEnv.step",
+                          MagicMock(side_effect=KeyboardInterrupt)):
+            with self.assertRaises(KeyboardInterrupt):
+                env.step(env.action_space.sample())
 
         env.reset()
         env.step(env.action_space.sample())
