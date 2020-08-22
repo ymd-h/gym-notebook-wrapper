@@ -145,6 +145,23 @@ class TestMonitor(unittest.TestCase):
         env.reset()
         env.step(env.action_space.sample())
 
+    def test_display_after_close(self):
+        """
+        Display after close
+        """
+        env = gnwrapper.Monitor(gym.make('CartPole-v1'),
+                                directory="./test_display_after_close/",
+                                video_callable=lambda ep: True)
+        env.reset()
+
+        for _ in range(100):
+            o, r, d, i = env.step(env.action_space.sample())
+
+            if d:
+                env.reset()
+        env.close()
+        env.display()
+
 
 if __name__ == "__main__":
     unittest.main()
