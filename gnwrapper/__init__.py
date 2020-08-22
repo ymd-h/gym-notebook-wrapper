@@ -178,7 +178,7 @@ class Monitor(_monitor):
         Step Environment
         """
         try:
-            super().step(action)
+            return super().step(action)
         except KeyboardInterrupt as k:
             self._close_running_video()
             raise
