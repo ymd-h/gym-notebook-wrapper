@@ -168,6 +168,21 @@ class Monitor(_monitor):
         VirtualDisplay(env,size)
         super().__init__(env,directory,*args,**kwargs)
 
+    def _close_running_video(self):
+        self._close_video_recorder()
+        self.video_recorder = None
+        self._flush(force=True)
+
+    def step(self,action):
+        """
+        Step Environment
+        """
+        try:
+            super().step(action)
+        except KeyboardInterrupt as k:
+            self._close_running_video()
+            raise
+
     def reset(self,**kwargs):
         """
         Reset Environment
@@ -193,9 +208,7 @@ class Monitor(_monitor):
         """
 
         # Close current video.
-        self._close_video_recorder()
-        self.video_recorder = None
-        self._flush(force=True)
+        self._close_running_video()
 
         for f in self.videos:
             video = io.open(f[0], "r+b").read()
