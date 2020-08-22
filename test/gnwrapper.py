@@ -137,8 +137,8 @@ class TestMonitor(unittest.TestCase):
                                 video_callable=lambda ep: True)
         env.reset()
 
-        with patch.object("gym.envs.classic_control.cartpole.CartPoleEnv.step",
-                          MagicMock(side_effect=KeyboardInterrupt)):
+        with patch("gym.envs.classic_control.cartpole.CartPoleEnv.step",
+                   MagicMock(side_effect=KeyboardInterrupt)):
             with self.assertRaises(KeyboardInterrupt):
                 env.step(env.action_space.sample())
 
