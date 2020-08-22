@@ -140,7 +140,7 @@ class TestMonitor(unittest.TestCase):
         env.reset()
 
         with self.assertRaises(KeyboardInterrupt):
-            env.step()
+            env.step(env.action_space.sample())
 
         env.reset()
         env.step()
