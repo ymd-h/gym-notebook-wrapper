@@ -1,5 +1,6 @@
 import os
 import unittest
+from unittest.mock import MagicMock, patch
 import re
 
 import gnwrapper
@@ -124,6 +125,26 @@ class TestMonitor(unittest.TestCase):
                 env.reset()
 
         env.display()
+
+    def test_KeyboardInterrupt(self):
+        """
+        After KeyboardInterrupt, notebook kernel dies.
+
+        Ref: https://gitlab.com/ymd_h/gym-notebook-wrapper/-/issues/4
+        """
+        env = gnwrapper.Monitor(gym.make('CartPole-v1'),
+                                directory="./test_keyboard_interrupt/",
+                                video_callable=lambda ep: True)
+        env.reset()
+
+        with patch("gym.envs.classic_control.cartpole.CartPoleEnv.step",
+                   MagicMock(side_effect=KeyboardInterrupt)):
+            with self.assertRaises(KeyboardInterrupt):
+                env.step(env.action_space.sample())
+
+        env.reset()
+        env.step(env.action_space.sample())
+
 
 if __name__ == "__main__":
     unittest.main()
