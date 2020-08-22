@@ -143,7 +143,7 @@ class TestMonitor(unittest.TestCase):
             env.step(env.action_space.sample())
 
         env.reset()
-        env.step()
+        env.step(env.action_space.sample())
 
 
 if __name__ == "__main__":
