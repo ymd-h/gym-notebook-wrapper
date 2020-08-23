@@ -140,8 +140,7 @@ class TestMonitor(unittest.TestCase):
                                 video_callable=lambda ep: True)
 
         for func in [f"{CartPole}.step",
-                     f"{VideoRecorder}.capture_frame",
-                     f"io.FileIO.write"]:
+                     f"{VideoRecorder}.capture_frame"]:
             env.reset()
             with self.subTest(function=func):
                 with patch(func,
@@ -153,6 +152,18 @@ class TestMonitor(unittest.TestCase):
                 env.step(env.action_space.sample())
                 env.display()
                 env.render(mode='rgb_array')
+
+            env.reset()
+            with patch("io.FileIO",MagicMock()) as F:
+                F.write.side_effect = KeyboardInterrupt
+                with self.assertRaises(KeyboardInterrupt):
+                    env.step(env.action_space.sample())
+
+            env.reset()
+            env.step(env.action_space.sample())
+            env.display()
+            env.render(mode='rgb_array')
+
 
         for func in [f"{CartPole}.reset",
                      "os.waitpid"]:
