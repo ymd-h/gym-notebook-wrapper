@@ -12,6 +12,20 @@ from matplotlib import animation
 from pyvirtualdisplay import Display
 
 
+class _VirtualDisplaySingleton(object):
+    def __new__(cls,*args,**kwargs):
+        if not hasattr(cls,"_instance"):
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def __init__(self,size=(1024, 768)):
+        self.size = size
+
+        if not hasattr(self,"_display"):
+            self._display = Display(visible=0,size=self.size)
+            self._display.start()
+
+
 class VirtualDisplay(Wrapper):
     """
     Wrapper for running Xvfb
@@ -22,23 +36,12 @@ class VirtualDisplay(Wrapper):
         """
         super().__init__(env)
         self.size = size
-        self._display = None
-        self._ensure_display()
-
-    def _ensure_display(self):
-        """
-        Ensure to start virtual display
-        """
-        # To avoid starting multiple virtual display
-        if not os.getenv("DISPLAY",None):
-            self._display = self._display or Display(visible=0, size=self.size)
-            self._display.start()
+        self._display = _VirtualDisplaySingleton(size)
 
     def render(self,mode=None,**kwargs):
         """
         Render environment
         """
-        self._ensure_display()
         return self.env.render(mode='rgb_array',**kwargs)
 
 
@@ -165,7 +168,7 @@ class Monitor(_monitor):
         if directory is None:
             directory = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
-        VirtualDisplay(env,size)
+        self._display = _VirtualDisplaySingleton(size)
         super().__init__(env,directory,*args,**kwargs)
 
     def _close_running_video(self):
