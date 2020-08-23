@@ -169,8 +169,9 @@ class Monitor(_monitor):
         super().__init__(env,directory,*args,**kwargs)
 
     def _close_running_video(self):
-        self._close_video_recorder()
-        self.video_recorder = None
+        if self.video_recorder:
+            self._close_video_recorder()
+            self.video_recorder = None
         self._flush(force=True)
 
     def step(self,action):
