@@ -189,7 +189,6 @@ class Monitor(_monitor):
             return super().step(action)
         except KeyboardInterrupt as k:
             self._close_running_video()
-            self._display._restart_display()
             raise
 
     def reset(self,**kwargs):
@@ -205,7 +204,6 @@ class Monitor(_monitor):
             return super().reset(**kwargs)
         except KeyboardInterrupt:
             self._close_running_video()
-            self._display._restart_display()
             raise
 
     def display(self,reset: bool=False):
