@@ -153,15 +153,18 @@ class TestMonitor(unittest.TestCase):
                 env.display()
                 env.render(mode='rgb_array')
 
-        with patch(f"{CartPole}.reset",
-                   MagicMock(side_effect=KeyboardInterrupt)):
-            with self.assertRaises(KeyboardInterrupt):
-                env.reset()
+        for func in [f"{CartPole}.reset",
+                     "os.waitpid"]:
+            with self.subTest(function=func):
+                with patch(func,
+                           MagicMock(side_effect=KeyboardInterrupt)):
+                    with self.assertRaises(KeyboardInterrupt):
+                        env.reset()
 
-        env.reset()
-        env.step(env.action_space.sample())
-        env.display()
-        env.render(mode='rgb_array')
+                env.reset()
+                env.step(env.action_space.sample())
+                env.display()
+                env.render(mode='rgb_array')
 
     def test_display_after_close(self):
         """
