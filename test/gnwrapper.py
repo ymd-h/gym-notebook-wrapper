@@ -145,6 +145,14 @@ class TestMonitor(unittest.TestCase):
         env.reset()
         env.step(env.action_space.sample())
 
+        with patch("gym.envs.classic_control.cartpole.CartPoleEnv.reset",
+                   MagicMock(side_effect=KeyboardInterrupt)):
+            with self.assertRaises(KeyboardInterrupt):
+                env.reset()
+
+        env.reset()
+        env.step(env.action_space.sample())
+
     def test_display_after_close(self):
         """
         Display after close
