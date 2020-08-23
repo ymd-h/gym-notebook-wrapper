@@ -27,10 +27,12 @@ class _VirtualDisplaySingleton(object):
             self._display = Display(visible=0,size=self.size)
 
             original = subprocess.Popen
-            with patch("subprocess.Popen",
-                       lambda cmd,out,err,shell: original(cmd, stdout=out, stderr=err,
-                                                          shell=shell,
-                                                          preexec_fn=os.setpgrp)):
+            def Popen(cmd,pass_fds,stdout,stderr,shell):
+                return original(cmd,pass_fds=pass_fds,
+                                stdout=stout,stderr=stderr,
+                                shell=shell,preexec_fn=os.setpgrp)
+
+            with patch("subprocess.Popen",Popen):
                 self._display.start()
 
     def _restart_display(self):
