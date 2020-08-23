@@ -155,6 +155,8 @@ class TestMonitor(unittest.TestCase):
 
         env.display()
 
+        env.render()
+
     def test_display_after_close(self):
         """
         Display after close
