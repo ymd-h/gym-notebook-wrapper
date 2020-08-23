@@ -144,6 +144,8 @@ class TestMonitor(unittest.TestCase):
 
         env.reset()
         env.step(env.action_space.sample())
+        env.display()
+        env.render()
 
         with patch("gym.envs.classic_control.cartpole.CartPoleEnv.reset",
                    MagicMock(side_effect=KeyboardInterrupt)):
