@@ -154,7 +154,7 @@ class TestMonitor(unittest.TestCase):
                 env.render(mode='rgb_array')
 
             env.reset()
-            with patch("io.FileIO",MagicMock()) as F:
+            with patch("io.BytesIO",MagicMock()) as F:
                 F.write = MagicMock(side_effect=KeyboardInterrupt)
                 with self.assertRaises(KeyboardInterrupt):
                     env.step(env.action_space.sample())
