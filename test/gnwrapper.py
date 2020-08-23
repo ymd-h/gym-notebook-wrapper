@@ -153,17 +153,6 @@ class TestMonitor(unittest.TestCase):
                 env.display()
                 env.render(mode='rgb_array')
 
-            env.reset()
-            with patch("io.BytesIO",MagicMock()) as F:
-                F.write = MagicMock(side_effect=KeyboardInterrupt)
-                with self.assertRaises(KeyboardInterrupt):
-                    env.step(env.action_space.sample())
-
-            env.reset()
-            env.step(env.action_space.sample())
-            env.display()
-            env.render(mode='rgb_array')
-
 
         for func in [f"{CartPole}.reset",
                      "os.waitpid"]:
