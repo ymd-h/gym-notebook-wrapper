@@ -2,6 +2,7 @@ import os
 import unittest
 from unittest.mock import MagicMock, patch
 import re
+import subprocess
 
 import gnwrapper
 import gym
@@ -134,6 +135,7 @@ class TestMonitor(unittest.TestCase):
         """
         CartPole = "gym.envs.classic_control.cartpole.CartPoleEnv"
         VideoRecorder = "gym.wrappers.monitoring.video_recorder.VideoRecorder"
+        Popen = "subprocess.Popen"
 
         env = gnwrapper.Monitor(gym.make('CartPole-v1'),
                                 directory="./test_keyboard_interrupt/",
@@ -141,7 +143,8 @@ class TestMonitor(unittest.TestCase):
         env.reset()
 
         for func in [f"{CartPoleEnv}.step",
-                     f"{VideoRecorder}.capture_frame"]:
+                     f"{VideoRecorder}.capture_frame",
+                     f"{Popen}.stdin.write"]:
             with self.subTest(function=func):
                 with patch(func,
                            MagicMock(side_effect=KeyboardInterrupt)):
