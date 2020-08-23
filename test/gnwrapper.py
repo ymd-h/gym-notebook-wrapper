@@ -142,7 +142,7 @@ class TestMonitor(unittest.TestCase):
                                 video_callable=lambda ep: True)
         env.reset()
 
-        for func in [f"{CartPoleEnv}.step",
+        for func in [f"{CartPole}.step",
                      f"{VideoRecorder}.capture_frame",
                      f"{Popen}.stdin.write"]:
             with self.subTest(function=func):
