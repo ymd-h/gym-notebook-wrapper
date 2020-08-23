@@ -188,12 +188,16 @@ class Monitor(_monitor):
         """
         Reset Environment
         """
-        if self.stats_recorder and not self.stats_recorder.done:
-            # StatsRecorder requires `done=True` before `reset()`
-            self.stats_recorder.done = True
-            self.stats_recorder.save_complete()
+        try:
+            if self.stats_recorder and not self.stats_recorder.done:
+                # StatsRecorder requires `done=True` before `reset()`
+                self.stats_recorder.done = True
+                self.stats_recorder.save_complete()
 
-        return super().reset(**kwargs)
+            return super().reset(**kwargs)
+        except KeyboardInterrupt:
+            self._close_running_video()
+            raise
 
     def display(self,reset: bool=False):
         """
