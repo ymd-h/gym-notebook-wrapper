@@ -141,7 +141,7 @@ class TestMonitor(unittest.TestCase):
 
         for func in [f"{CartPole}.step",
                      f"{VideoRecorder}.capture_frame",
-                     f"io.open.write"]:
+                     f"io.FileIO.write"]:
             env.reset()
             with self.subTest(function=func):
                 with patch(func,
