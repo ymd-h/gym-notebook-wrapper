@@ -152,9 +152,7 @@ class TestMonitor(unittest.TestCase):
 
         env.reset()
         env.step(env.action_space.sample())
-
         env.display()
-
         env.render()
 
     def test_display_after_close(self):
