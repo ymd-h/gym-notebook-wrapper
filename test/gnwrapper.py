@@ -140,11 +140,11 @@ class TestMonitor(unittest.TestCase):
         env = gnwrapper.Monitor(gym.make('CartPole-v1'),
                                 directory="./test_keyboard_interrupt/",
                                 video_callable=lambda ep: True)
-        env.reset()
 
         for func in [f"{CartPole}.step",
                      f"{VideoRecorder}.capture_frame",
                      f"{Popen}.stdin.write"]:
+            env.reset()
             with self.subTest(function=func):
                 with patch(func,
                            MagicMock(side_effect=KeyboardInterrupt)):
@@ -158,6 +158,7 @@ class TestMonitor(unittest.TestCase):
 
         for func in [f"{CartPole}.reset",
                      "os.waitpid"]:
+            env.reset()
             with self.subTest(function=func):
                 with patch(func,
                            MagicMock(side_effect=KeyboardInterrupt)):
