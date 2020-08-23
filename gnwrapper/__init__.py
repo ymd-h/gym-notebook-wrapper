@@ -212,6 +212,9 @@ class Monitor(_monitor):
         self._close_running_video()
 
         for f in self.videos:
+            if not os.path.exists(f[0]):
+                continue
+
             video = io.open(f[0], "r+b").read()
             encoded = base64.b64encode(video)
 
