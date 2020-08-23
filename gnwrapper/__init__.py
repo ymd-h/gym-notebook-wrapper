@@ -3,6 +3,8 @@ import datetime
 import io
 import os
 from typing import Optional
+import subprocess
+from unittest.mock import patch
 
 from gym import Wrapper
 from gym.wrappers import Monitor as _monitor
@@ -23,7 +25,13 @@ class _VirtualDisplaySingleton(object):
 
         if not hasattr(self,"_display"):
             self._display = Display(visible=0,size=self.size)
-            self._display.start()
+
+            original = subprocess.Popen
+            with patch("subprocess.Popen",
+                       lambda cmd,out,err,shell: original(cmd, stdout=out, stderr=err,
+                                                          shell=shell,
+                                                          preexec_fn=os.setpgrp)):
+                self._display.start()
 
     def _restart_display(self):
         self._display.stop()
