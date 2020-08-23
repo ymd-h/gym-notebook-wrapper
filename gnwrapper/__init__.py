@@ -29,7 +29,7 @@ class _VirtualDisplaySingleton(object):
             original = subprocess.Popen
             def Popen(cmd,pass_fds,stdout,stderr,shell):
                 return original(cmd,pass_fds=pass_fds,
-                                stdout=stout,stderr=stderr,
+                                stdout=stdout,stderr=stderr,
                                 shell=shell,preexec_fn=os.setpgrp)
 
             with patch("subprocess.Popen",Popen):
