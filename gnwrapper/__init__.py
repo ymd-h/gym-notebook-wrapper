@@ -3,6 +3,8 @@ import datetime
 import io
 import os
 from typing import Optional
+import subprocess
+from unittest.mock import patch
 
 from gym import Wrapper
 from gym.wrappers import Monitor as _monitor
@@ -10,6 +12,32 @@ from IPython import display
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from pyvirtualdisplay import Display
+
+
+class _VirtualDisplaySingleton(object):
+    def __new__(cls,*args,**kwargs):
+        if not hasattr(cls,"_instance"):
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def __init__(self,size=(1024, 768)):
+        self.size = size
+
+        if not hasattr(self,"_display"):
+            self._display = Display(visible=0,size=self.size)
+
+            original = subprocess.Popen
+            def Popen(cmd,pass_fds,stdout,stderr,shell):
+                return original(cmd,pass_fds=pass_fds,
+                                stdout=stdout,stderr=stderr,
+                                shell=shell,preexec_fn=os.setpgrp)
+
+            with patch("subprocess.Popen",Popen):
+                self._display.start()
+
+    def _restart_display(self):
+        self._display.stop()
+        self._display.start()
 
 
 class VirtualDisplay(Wrapper):
@@ -22,23 +50,12 @@ class VirtualDisplay(Wrapper):
         """
         super().__init__(env)
         self.size = size
-        self._display = None
-        self._ensure_display()
-
-    def _ensure_display(self):
-        """
-        Ensure to start virtual display
-        """
-        # To avoid starting multiple virtual display
-        if not os.getenv("DISPLAY",None):
-            self._display = self._display or Display(visible=0, size=self.size)
-            self._display.start()
+        self._display = _VirtualDisplaySingleton(size)
 
     def render(self,mode=None,**kwargs):
         """
         Render environment
         """
-        self._ensure_display()
         return self.env.render(mode='rgb_array',**kwargs)
 
 
@@ -165,7 +182,7 @@ class Monitor(_monitor):
         if directory is None:
             directory = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
-        VirtualDisplay(env,size)
+        self._display = _VirtualDisplaySingleton(size)
         super().__init__(env,directory,*args,**kwargs)
 
     def _close_running_video(self):
@@ -188,12 +205,16 @@ class Monitor(_monitor):
         """
         Reset Environment
         """
-        if self.stats_recorder and not self.stats_recorder.done:
-            # StatsRecorder requires `done=True` before `reset()`
-            self.stats_recorder.done = True
-            self.stats_recorder.save_complete()
+        try:
+            if self.stats_recorder and not self.stats_recorder.done:
+                # StatsRecorder requires `done=True` before `reset()`
+                self.stats_recorder.done = True
+                self.stats_recorder.save_complete()
 
-        return super().reset(**kwargs)
+            return super().reset(**kwargs)
+        except KeyboardInterrupt:
+            self._close_running_video()
+            raise
 
     def display(self,reset: bool=False):
         """

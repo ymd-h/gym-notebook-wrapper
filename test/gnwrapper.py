@@ -132,18 +132,41 @@ class TestMonitor(unittest.TestCase):
 
         Ref: https://gitlab.com/ymd_h/gym-notebook-wrapper/-/issues/4
         """
+        CartPole = "gym.envs.classic_control.cartpole.CartPoleEnv"
+        VideoRecorder = "gym.wrappers.monitoring.video_recorder.VideoRecorder"
+
         env = gnwrapper.Monitor(gym.make('CartPole-v1'),
                                 directory="./test_keyboard_interrupt/",
                                 video_callable=lambda ep: True)
-        env.reset()
 
-        with patch("gym.envs.classic_control.cartpole.CartPoleEnv.step",
-                   MagicMock(side_effect=KeyboardInterrupt)):
-            with self.assertRaises(KeyboardInterrupt):
+        for func in [f"{CartPole}.step",
+                     f"{VideoRecorder}.capture_frame"]:
+            env.reset()
+            with self.subTest(function=func):
+                with patch(func,
+                           MagicMock(side_effect=KeyboardInterrupt)):
+                    with self.assertRaises(KeyboardInterrupt):
+                        env.step(env.action_space.sample())
+
+                env.reset()
                 env.step(env.action_space.sample())
+                env.display()
+                env.render(mode='rgb_array')
 
-        env.reset()
-        env.step(env.action_space.sample())
+
+        for func in [f"{CartPole}.reset",
+                     "os.waitpid"]:
+            env.reset()
+            with self.subTest(function=func):
+                with patch(func,
+                           MagicMock(side_effect=KeyboardInterrupt)):
+                    with self.assertRaises(KeyboardInterrupt):
+                        env.reset()
+
+                env.reset()
+                env.step(env.action_space.sample())
+                env.display()
+                env.render(mode='rgb_array')
 
     def test_display_after_close(self):
         """
