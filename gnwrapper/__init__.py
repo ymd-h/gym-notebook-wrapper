@@ -25,6 +25,10 @@ class _VirtualDisplaySingleton(object):
             self._display = Display(visible=0,size=self.size)
             self._display.start()
 
+    def _restart_display(self):
+        self._display.stop()
+        self._display.start()
+
 
 class VirtualDisplay(Wrapper):
     """
