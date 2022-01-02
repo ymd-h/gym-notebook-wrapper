@@ -111,5 +111,9 @@ class HTML(benv.Wrapper):
                      for i in episodes]
 
         for h in htmls:
+            if not os.path.exists(h):
+                continue
+
+            ddisplay(h)
             with open(h) as hstr:
                 ddisplay(dHTML(hstr.read()))
