@@ -6,6 +6,7 @@ variables: &global-variables
 stages:
   - build_image
   - test
+  - coverage
   - pypi
 
 
@@ -36,10 +37,39 @@ unit_test:
   image: $CI_REGISTRY_IMAGE/build:latest
   stage: test
   script:
+    - pip install -U "gym>=0.20.0"
     - pip install .
     - coverage run -m xmlrunner test/gnwrapper.py
+  artifacts:
+    paths:
+      - .coverage.*
+      - "*.xml"
+    reports:
+      junit:
+        - "*.xml"
+
+unit_test_019:
+  image: $CI_REGISTRY_IMAGE/build:latest
+  stage: test
+  script:
+    - pip install -U "gym<=0.19.0"
+    - pip install .
+    - coverage run -m xmlrunner test/gnwrapper.py
+  artifacts:
+    paths:
+      - .coverage.*
+      - "*.xml"
+    reports:
+      junit:
+        - "*.xml"
+
+coverage:
+  image: $CI_REGISTRY_IMAGE/build:latest
+  stage: coverage
+  script:
     - coverage combine
     - coverage report
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
 
 upload_pypi:
