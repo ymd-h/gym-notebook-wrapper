@@ -57,7 +57,7 @@ class HTML(benv.Wrapper):
 
         return state
 
-    def reset(self, jp.ndarray: rng) -> benv.State:
+    def reset(self, rng: jp.ndarray) -> benv.State:
         self._episode += 1
         self._qps = []
         return self.env.reset(rng)
