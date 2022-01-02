@@ -12,13 +12,15 @@ from brax.io import html
 from brax.io.file import File
 from brax.envs import env as benv
 import brax.jumpy as jp
+import jax
 
 class HTML(benv.Wrapper):
     """
     HTML Wrapper to store Brax trajectory as HTML
     """
     def __init__(self, env: benv.Env, directory: Optional[str]=None, height: int=480,
-                 video_callable: Optional[Callable[[int], bool]]=None):
+                 video_callable: Optional[Callable[[int], bool]]=None,
+                 jit: bool=True):
         r"""
         Initialize HTML class
 
@@ -33,6 +35,8 @@ class HTML(benv.Wrapper):
             Height in px. The default is ``480``.
         video_callable: (int) -> bool, optional
             Function to determine whether each episode is recorded or not.
+        jit : bool
+            Whether wrap step/reset function with jax.jit
         """
         super().__init__(env)
 
@@ -47,8 +51,22 @@ class HTML(benv.Wrapper):
         self._callable = video_callable or default_schedule
         self._qps = []
 
+        def step(state, action):
+            return self.env.step(state, action)
+
+        def reset(rng):
+            return self.env.reset(rng)
+
+        if jit:
+            step = jax.jit(step)
+            reset = jax.jit(reset)
+
+        self._step = step
+        self._reset = reset
+
+
     def step(self, state: benv.State, action: jp.ndarray) -> benv.State:
-        state = self.env.step(state, action)
+        state = self._step(state, action)
 
         if self._video_enabled():
             self._qps.append(state.qp)
@@ -60,7 +78,7 @@ class HTML(benv.Wrapper):
     def reset(self, rng: jp.ndarray) -> benv.State:
         self._episode += 1
         self._qps = []
-        return self.env.reset(rng)
+        return self._reset(rng)
 
     def _video_enabled(self):
         return self._callable(self._episode)
