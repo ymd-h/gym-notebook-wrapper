@@ -141,7 +141,7 @@ class BraxHTML(benv.Wrapper):
             Episode number(s) to be displayed.
             If ``None`` (default), all the episode will be displayed.
         """
-        self._html.display()
+        self._html.display(episodes)
 
 
 class GymHTML(gym.Wrapper):
@@ -191,4 +191,4 @@ class GymHTML(gym.Wrapper):
             Episode number(s) to be displayed.
             If ``None`` (default), all the episode will be displayed.
         """
-        self._html.display()
+        self._html.display(episodes)
