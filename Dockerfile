@@ -3,7 +3,7 @@ FROM python:3.7
 RUN apt update \
 	&& apt install -y --no-install-recommends \
 	ffmpeg \
-	python-opengl \
+	python3-opengl \
 	xvfb \
 	&& apt clean \
 	&& rm -rf /var/lib/apt/lists/*
