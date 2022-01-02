@@ -60,11 +60,13 @@ class _HTML:
 
     def display(self, episodes: Optional[Union[int, List[int]]]=None):
         if episodes is None:
-            htmls = glob.glob(os.path.join(self._directory, "*.html"))
+            # Make sure numerically ascending order
+            episodes = self.recorded_episode()
         else:
-            episodes = np.array(episodes, copy=False, ndmin=1)
-            htmls = [os.path.join(self._directory, f"episode-{i}.html")
-                     for i in episodes]
+            episodes = np.array(episodes, copy=False, ndmin=1).ravel()
+
+        htmls = [os.path.join(self._directory, f"episode-{i}.html")
+                 for i in episodes]
 
         for h in htmls:
             if not os.path.exists(h):
