@@ -11,7 +11,7 @@ RUN apt update \
 RUN pip3 install -U pip setuptools \
 	&& pip3 install -U \
 	coverage \
-	gym \
+	gym["classic_control"] \
 	matplotlib \
 	pyvirtualdisplay \
 	twine \
