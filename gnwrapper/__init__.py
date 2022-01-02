@@ -207,10 +207,21 @@ class Monitor(_monitor):
 
         kwargs[_video_callable_key] = video_callable
         super().__init__(env, directory, *args, **kwargs)
+        if not hasattr(self, "videos"):
+            # gym >= 0.20.0
+            self.videos = []
 
     def _close_running_video(self):
         if self.video_recorder:
-            self._close_video_recorder()
+            if hasattr(self, "_close_video_recorder"):
+                # gym <= 0.19.0
+                self._close_video_recorder()
+            else:
+                # gym >= 0.20.0
+                self.close_video_recorder()
+                if self.video_video_recorder.functional:
+                    self.videos.append((self.video_recorder.path,
+                                        self.video_recorder.metadata_path))
             self.video_recorder = None
         self._flush(force=True)
 
