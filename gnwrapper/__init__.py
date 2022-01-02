@@ -11,11 +11,11 @@ from gym import Wrapper
 try:
     # gym >= 0.20.0
     from gym.wrappers import RecordVideo as _monitor
-    _video_callable_key = "video_callable"
+    _video_callable_key = "episode_trigger"
 except ImportError:
     # gym <= 0.19.0
     from gym.wrappers import Monitor as _monitor
-    _video_callable_key = "episode_trigger"
+    _video_callable_key = "video_callable"
 
 from IPython import display
 import matplotlib.pyplot as plt
