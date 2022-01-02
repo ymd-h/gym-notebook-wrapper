@@ -23,8 +23,8 @@ stages:
 
 docker_build_schedule:
   <<: *docker_build
-  only:
-    - schedules
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
 
 docker_build_manual:
   <<: *docker_build
