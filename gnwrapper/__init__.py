@@ -219,7 +219,7 @@ class Monitor(_monitor):
             else:
                 # gym >= 0.20.0
                 self.close_video_recorder()
-                if self.video_video_recorder.functional:
+                if self.video_recorder.functional:
                     self.videos.append((self.video_recorder.path,
                                         self.video_recorder.metadata_path))
             self.video_recorder = None
