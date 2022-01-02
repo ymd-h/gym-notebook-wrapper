@@ -18,7 +18,7 @@ class HTML(benv.Wrapper):
     HTML Wrapper to store Brax trajectory as HTML
     """
     def __init__(self, env: benv.Env, directory: Optional[str]=None, height: int=480,
-                 video_callable: Optional[Callable[int], bool]=None):
+                 video_callable: Optional[Callable[[int], bool]]=None):
         r"""
         Initialize HTML class
 
