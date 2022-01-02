@@ -71,6 +71,10 @@ class HTML(benv.Wrapper):
         with File(path, 'w') as fout:
             fout.write(html.render(self.env.sys, self._qps, self._height))
 
+    def recorded_episode(self):
+        htmls = glob.glob(os.path.join(self._directory, "*.html"))
+        return [int(h.rsplit("-", maxsplit=1)[-1][:-5]) for h in htmls]
+
     def display(self, episodes: Optional[Union[int, List[int]]]=None):
         """
         Display saved htmls
