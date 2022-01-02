@@ -15,7 +15,7 @@ from brax.envs import env as benv
 import brax.jumpy as jp
 import jax
 
-__all__ = [BraxHTML, GymHTML]
+__all__ = ["BraxHTML", "GymHTML"]
 
 
 class _HTML:
