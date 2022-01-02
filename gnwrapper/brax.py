@@ -90,4 +90,4 @@ class HTML(benv.Wrapper):
 
         for h in htmls:
             with open(h) as hstr:
-                ddisplay(dHTML(hstr))
+                ddisplay(dHTML(hstr.read()))
