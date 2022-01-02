@@ -2,12 +2,21 @@ import base64
 import datetime
 import io
 import os
-from typing import Optional
+from typing import Optional, Callable
 import subprocess
 from unittest.mock import patch
 
 from gym import Wrapper
-from gym.wrappers import Monitor as _monitor
+
+try:
+    # gym >= 0.20.0
+    from gym.wrappers import RecordVideo as _monitor
+    _video_callable_key = "video_callable"
+except ImportError:
+    # gym <= 0.19.0
+    from gym.wrappers import Monitor as _monitor
+    _video_callable_key = "episode_trigger"
+
 from IPython import display
 import matplotlib.pyplot as plt
 from matplotlib import animation
@@ -161,29 +170,43 @@ class Monitor(_monitor):
     """
     Monitor wrapper to store images as videos.
 
-    This class is a shin wrapper for `gym.wrappers.Monitor`. This class also
+    This class is a shin wrapper for ``gym.wrappers.Monitor`` (gym <= 0.19.0)
+    or ``gym.wrappers.RecordVideo`` (gym >= 0.20.0). This class also
     have a method `display`, which shows recorded movies on Notebook.
 
     See Also
     --------
     gym.wrappers.Monitor : https://github.com/openai/gym/blob/master/gym/wrappers/monitor.py
+    gym.wrappers.RecordVideo : https://github.com/openai/gym/blob/master/gym/wrappers/record_video.py
     """
-    def __init__(self,env,directory: Optional[str]=None,size=(1024, 768),
+    def __init__(self, env, directory: Optional[str] = None, size = (1024, 768),
+                 video_callable: Callable[[int], bool] = None,
                  *args,**kwargs):
         """
         Initialize Monitor class
 
         Parameters
         ----------
+        env : gym.Env
+            Environment to be recorded
         directory : str, optional
             Directory to store output movies. When the value is `None`,
             which is default, "%Y%m%d-%H%M%S" is used for directory.
+        video_callable : (int) -> bool, optional
+            Function to determine whether each episode is recorded or not.
+            If ``None`` (default), every 1000 episodes and cubic numbers
+            less than 1000 are recorded.
+        *args, **kwargs
+            Additional arguments and keyword arguments to be passed to
+            base class.
         """
         if directory is None:
             directory = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
         self._display = _VirtualDisplaySingleton(size)
-        super().__init__(env,directory,*args,**kwargs)
+
+        kwargs[_video_callable_key] = video_callable
+        super().__init__(env, directory, *args, **kwargs)
 
     def _close_running_video(self):
         if self.video_recorder:
