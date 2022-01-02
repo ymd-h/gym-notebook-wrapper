@@ -15,7 +15,7 @@ else:
 
 setup(name="gym-notebook-wrapper",
       author="Yamada Hiroyuki",
-      version="1.2.4",
+      version="1.2.5",
       install_requires=["gym","matplotlib","pyvirtualdisplay","ipython"],
       packages=["gnwrapper"],
       url="https://gitlab.com/ymd_h/gym-notebook-wrapper",
