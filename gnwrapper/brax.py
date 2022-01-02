@@ -91,7 +91,7 @@ class HTML(benv.Wrapper):
 
     def recorded_episode(self):
         htmls = glob.glob(os.path.join(self._directory, "*.html"))
-        return [int(h.rsplit("-", maxsplit=1)[-1][:-5]) for h in htmls]
+        return sorted([int(h.rsplit("-", maxsplit=1)[-1][:-5]) for h in htmls])
 
     def display(self, episodes: Optional[Union[int, List[int]]]=None):
         """
