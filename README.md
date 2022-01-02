@@ -98,9 +98,14 @@ env.display()
 
 ### 3.3 Movie Animation
 
-Wrap `gum.Env` class with `gnwrapper.Monitor`. This wrapper inherits
-`gym.wrappers.Monitor` and implements `display()` method for embedding
-mp4 movie into Notebook.
+Wrap `gym.Env` class with `gnwrapper.Monitor`. This wrapper inherits
+`gym.wrappers.Monitor` (for `gym<=0.19.0`) or `gym.wrapper.RecordVideo`
+(for `gym>=0.20.0`), and implements `display()` method for embedding mp4
+movie into Notebook.
+
+Note: `gym.wrappers.Monitor` was deprecated at `gym==0.20.0`, which
+was released on 14th
+September 2021. [See](https://github.com/openai/gym/issues/2297).
 
 If you call `display(reset=True)`, the video list is cleared and the
 next `display()` method shows only new videos.
