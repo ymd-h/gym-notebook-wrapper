@@ -84,7 +84,7 @@ class HTML(benv.Wrapper):
         if episodes is None:
             htmls = glob.glob(os.path.join(self._directory, "*.html"))
         else:
-            episodes = np.asarray(episodes)
+            episodes = np.array(episodes, copy=False, ndmin=1)
             htmls = [os.path.join(self._directory, f"episode-{i}.html")
                      for i in episodes]
 
