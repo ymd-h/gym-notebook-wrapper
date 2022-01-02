@@ -216,6 +216,7 @@ class Monitor(_monitor):
             if hasattr(self, "_close_video_recorder"):
                 # gym <= 0.19.0
                 self._close_video_recorder()
+                self._flush(force=True)
             else:
                 # gym >= 0.20.0
                 self.close_video_recorder()
@@ -223,7 +224,6 @@ class Monitor(_monitor):
                     self.videos.append((self.video_recorder.path,
                                         self.video_recorder.metadata_path))
             self.video_recorder = None
-        self._flush(force=True)
 
     def step(self,action):
         """
