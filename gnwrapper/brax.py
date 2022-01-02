@@ -12,6 +12,7 @@ from gym.wrappers.monitor import capped_cubic_video_schedule as default_schedule
 from brax.io import html
 from brax.io.file import File
 from brax.envs import env as benv
+from brax.envs.wrappers import GymWrapper
 import brax.jumpy as jp
 import jax
 
@@ -143,7 +144,7 @@ class GymHTML(gym.Wrapper):
     """
     HTML Wrapper to store Gym wrappered Brax trajectory as HTML
     """
-    def __init__(self, env: benv.GymWrapper, directory: Optional[str]=None,
+    def __init__(self, env: GymWrapper, directory: Optional[str]=None,
                  height: int=480,
                  video_callable: Optional[Callable[[int], bool]]=None):
         r"""
@@ -151,7 +152,7 @@ class GymHTML(gym.Wrapper):
 
         Parameters
         ----------
-        env : Brax.envs.GymWrapper
+        env : Brax.envs.wrappers.GymWrapper
             Environment to be wrapped
         directory : str, optional
             Directory to store output html files.
