@@ -240,13 +240,15 @@ class Monitor(_monitor):
         Reset Environment
         """
         try:
-            if (hasattr(self, "stats_recorder") and
-                self.stats_recorder and
-                not self.stats_recorder.done):
-                # Only for gym <= 0.19.0
-                # StatsRecorder requires `done=True` before `reset()`
-                self.stats_recorder.done = True
-                self.stats_recorder.save_complete()
+            if hasattr(self, "stats_recorder"):
+                # gym <= 0.19.0
+                if self.stats_recorder and not self.stats_recorder.done:
+                    # StatsRecorder requires `done=True` before `reset()`
+                    self.stats_recorder.done = True
+                    self.stats_recorder.save_complete()
+            else:
+                # gym >= 0.20.0
+                self._close_running_video()
 
             return super().reset(**kwargs)
         except KeyboardInterrupt:
