@@ -9,6 +9,7 @@ import numpy as np
 import gym
 from gym.wrappers.monitor import capped_cubic_video_schedule as default_schedule
 
+import brax
 from brax.io import html
 from brax.io.file import File
 from brax.envs import env as benv
@@ -20,8 +21,9 @@ __all__ = ["BraxHTML", "GymHTML"]
 
 
 class _HTML:
-    def __init__(self, directory: Optional[str], height: int,
+    def __init__(self, sys: brax.System, directory: Optional[str], height: int,
                  video_callable: Optional[Callable[[int], bool]]):
+        self.sys = sys
         if directory is None:
             directory = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         os.makedirs(directory, exist_ok=True)
@@ -50,7 +52,7 @@ class _HTML:
         # Call ``render()`` directly, since ``save_html()`` doesn't take ``height``
         path = os.path.join(self._directory, f"episode-{self._episode}.html")
         with File(path, 'w') as fout:
-            fout.write(html.render(self.env.sys, self._qps, self._height))
+            fout.write(html.render(self.sys, self._qps, self._height))
 
     def recorded_episode(self):
         htmls = glob.glob(os.path.join(self._directory, "*.html"))
@@ -99,7 +101,7 @@ class BraxHTML(benv.Wrapper):
         """
         super().__init__(env)
 
-        self._html = _HTML(directory, height, video_callable)
+        self._html = _HTML(env.sys, directory, height, video_callable)
 
         def step(state, action):
             return self.env.step(state, action)
@@ -163,7 +165,7 @@ class GymHTML(gym.Wrapper):
             Function to determine whether each episode is recorded or not.
         """
         super().__init__(env)
-        self._html = _HTML(directory, height, video_callable)
+        self._html = _HTML(env._env.sys, directory, height, video_callable)
 
     def step(self, action):
         obs = self.env.step(action)
