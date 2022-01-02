@@ -229,7 +229,10 @@ class Monitor(_monitor):
         Reset Environment
         """
         try:
-            if self.stats_recorder and not self.stats_recorder.done:
+            if (hasattr(self, "stats_recorder") and
+                self.stats_recorder and
+                not self.stats_recorder.done):
+                # Only for gym <= 0.19.0
                 # StatsRecorder requires `done=True` before `reset()`
                 self.stats_recorder.done = True
                 self.stats_recorder.save_complete()
