@@ -133,11 +133,43 @@ class BraxHTML(benv.Wrapper):
 
 
     def step(self, state: benv.State, action: jp.ndarray) -> benv.State:
+        """
+        Run one timestep of environment's dynamics.
+
+        Parameters
+        ----------
+        state : brax.envs.State
+            Current state
+        action : brax.jumpy.ndarray (aka. Union[numpy.ndarray, jax.ndarray])
+            Action
+
+        Returns
+        -------
+        next_state : brax.envs.State
+            Next state
+
+        Notes
+        -----
+        States are recorded automatically
+        """
         state = self._step(state, action)
         self._html.record(state)
         return state
 
     def reset(self, rng: jp.ndarray) -> benv.State:
+        """
+        Resets the environment to an initial state.
+
+        Parameters
+        ----------
+        rng : brax.jumpy.ndarray (aka. Union[numpy.ndarray, jax.ndarray])
+            Random state
+
+        Returns
+        -------
+        state : brax.envs.State
+            Initial state
+        """
         self._html.reset()
         return self._reset(rng)
 
