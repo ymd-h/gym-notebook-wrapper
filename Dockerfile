@@ -10,6 +10,7 @@ RUN apt update \
 
 RUN pip3 install -U pip setuptools \
     && pip3 install -U \
+    brax \
     coverage \
     gym["classic_control"] \
     matplotlib \
