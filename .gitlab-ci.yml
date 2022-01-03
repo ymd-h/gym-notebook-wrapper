@@ -63,6 +63,20 @@ unit_test_019:
       junit:
         - "*.xml"
 
+unit_test_brax:
+  image: $CI_REGISTRY_IMAGE/build:latest
+  state: test
+  script:
+    - pip install .
+    - coverage run -m xmlrunner test/test_brax.py
+  artifacts:
+    paths:
+      - .coverage.*
+      - "*.xml"
+    reports:
+      junit:
+        - "*.xml"
+
 coverage:
   image: $CI_REGISTRY_IMAGE/build:latest
   stage: coverage
