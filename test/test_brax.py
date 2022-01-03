@@ -10,7 +10,7 @@ from gnwrapper.brax import BraxHTML, GymHTML, _HTML, RaiseWhenAutoReset
 class TestBrax(unittest.TestCase):
     def test_raise(self):
         RaiseWhenAutoReset(envs.create("ant", auto_reset=False))
-        with self.AssertRaises(ValueError):
+        with self.assertRaises(ValueError):
             RaiseWhenAutoReset(envs.create("ant", auto_reset=True))
 
     def test_HTML(self):
