@@ -71,7 +71,7 @@ class TestBrax(unittest.TestCase):
                 break
 
         self.assertEqual(ant.recorded_episode(), [1])
-        self.display()
+        ant.display()
 
     def test_brax_without_jit(self):
         ant = BraxHTML(envs.create("ant", auto_reset=False),
@@ -89,7 +89,7 @@ class TestBrax(unittest.TestCase):
                 break
 
         self.assertEqual(ant.recorded_episode(), [1])
-        self.display()
+        ant.display()
 
     def test_gym(self):
         ant = GymHTML(envs.create_gym_env("ant", auto_reset=False, seed=42),
@@ -106,7 +106,7 @@ class TestBrax(unittest.TestCase):
                                                            ant.action_space.shape))
 
         self.assertEqual(ant.recorded_episode(), [1])
-        self.display()
+        ant.display()
 
 
 
