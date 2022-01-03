@@ -182,7 +182,7 @@ for i in range(2):
         rng, rng_use = jp.random_split(rng)
         state = ant.step(state, jp.random_uniform(rng_use, (ant.action_size,)))
         if state.done:
-		    # When `state.done = True`, the episode is written at html file.
+        # When `state.done = True`, the episode is written at html file.
             break
 
 # We can get list of recorded episodes.
