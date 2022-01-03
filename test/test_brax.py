@@ -19,7 +19,7 @@ class TestBrax(unittest.TestCase):
 
         self.assertTrue(os.path.exists("test_HTML"))
         self.assertTrue(html._video_enabled())
-        self.assertEqual(html.recorded_episode(), [])
+        self.assertEqual(html.recorded_episodes(), [])
         self.assertEqual(html._episode, 0)
 
         rng = jp.random_prngkey(42)
@@ -44,7 +44,7 @@ class TestBrax(unittest.TestCase):
         html = _HTML(ant.sys, None, 100, lambda ep: False)
 
         self.assertFalse(html._video_enabled())
-        self.assertEqual(html.recorded_episode(), [])
+        self.assertEqual(html.recorded_episodes(), [])
         self.assertEqual(html._episode, 0)
 
         rng = jp.random_prngkey(42)
@@ -70,7 +70,7 @@ class TestBrax(unittest.TestCase):
             if state.done:
                 break
 
-        self.assertEqual(ant.recorded_episode(), [1])
+        self.assertEqual(ant.recorded_episodes(), [1])
         ant.display()
 
     def test_brax_without_jit(self):
@@ -88,7 +88,7 @@ class TestBrax(unittest.TestCase):
             if state.done:
                 break
 
-        self.assertEqual(ant.recorded_episode(), [1])
+        self.assertEqual(ant.recorded_episodes(), [1])
         ant.display()
 
     def test_gym(self):
@@ -105,7 +105,7 @@ class TestBrax(unittest.TestCase):
             obs, rew, done, _ = ant.step(jp.random_uniform(rng_use,
                                                            ant.action_space.shape))
 
-        self.assertEqual(ant.recorded_episode(), [1])
+        self.assertEqual(ant.recorded_episodes(), [1])
         ant.display()
 
 

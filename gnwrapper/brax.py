@@ -54,14 +54,14 @@ class _HTML:
         with File(path, 'w') as fout:
             fout.write(html.render(self.sys, self._qps, self._height))
 
-    def recorded_episode(self):
+    def recorded_episodes(self):
         htmls = glob.glob(os.path.join(self._directory, "*.html"))
         return sorted([int(h.rsplit("-", maxsplit=1)[-1][:-5]) for h in htmls])
 
     def display(self, episodes: Optional[Union[int, List[int]]]=None):
         if episodes is None:
             # Make sure numerically ascending order
-            episodes = self.recorded_episode()
+            episodes = self.recorded_episodes()
         else:
             episodes = np.array(episodes, copy=False, ndmin=1).ravel()
 
@@ -173,7 +173,7 @@ class BraxHTML(benv.Wrapper):
         self._html.reset()
         return self._reset(rng)
 
-    def recorded_episode(self):
+    def recorded_episodes(self):
         """
         Get Recorded Episodes
 
@@ -182,7 +182,7 @@ class BraxHTML(benv.Wrapper):
         episodes : list of int
             Recorded episodes
         """
-        return self._html.recorded_episode()
+        return self._html.recorded_episodes()
 
     def display(self, episodes: Optional[Union[int, List[int]]]=None):
         """
@@ -267,7 +267,7 @@ class GymHTML(gym.Wrapper):
         self._html.reset()
         return self.env.reset()
 
-    def recorded_episode(self):
+    def recorded_episodes(self):
         """
         Get Recorded Episodes
 
@@ -276,7 +276,7 @@ class GymHTML(gym.Wrapper):
         episodes : list of int
             Recorded episodes
         """
-        return self._html.recorded_episode()
+        return self._html.recorded_episodes()
 
     def display(self, episodes: Optional[Union[int, List[int]]]=None):
         """
