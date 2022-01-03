@@ -265,6 +265,12 @@ Since `done` is always `False`, auto reset
 must call `brax.envs.create()` or `brax.envs.create_gym_env()` with
 `auto_reset=False` argument.
 
+Vectorized (batched) environments
+(aka. `brax.envs.wrappers.VectorWrapper`,
+`brax.envs.wrappers.GymVectorWrapper`) are not supported, too. You
+should not specify `batch_size` argument at `brax.envs.create()` or
+`brax.envs.create_gym_env()`.
+
 ## 5. Links
 
 - [Repository](https://gitlab.com/ymd_h/gym-notebook-wrapper)
