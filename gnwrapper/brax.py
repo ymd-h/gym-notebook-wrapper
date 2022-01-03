@@ -174,6 +174,14 @@ class BraxHTML(benv.Wrapper):
         return self._reset(rng)
 
     def recorded_episode(self):
+        """
+        Get Recorded Episodes
+
+        Returns
+        -------
+        episodes : list of int
+            Recorded episodes
+        """
         return self._html.recorded_episode()
 
     def display(self, episodes: Optional[Union[int, List[int]]]=None):
@@ -260,6 +268,14 @@ class GymHTML(gym.Wrapper):
         return self.env.reset()
 
     def recorded_episode(self):
+        """
+        Get Recorded Episodes
+
+        Returns
+        -------
+        episodes : list of int
+            Recorded episodes
+        """
         return self._html.recorded_episode()
 
     def display(self, episodes: Optional[Union[int, List[int]]]=None):
