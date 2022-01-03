@@ -24,7 +24,7 @@ class TestBrax(unittest.TestCase):
 
         state = html.reset()
         self.assertEqual(html._episode, 1)
-        self.assertTrue(html._qps, [])
+        self.assertEqual(html._qps, [])
         html.record(state)
         self.assertEqual(len(html._qps), 1)
 
@@ -46,7 +46,7 @@ class TestBrax(unittest.TestCase):
 
         state = html.reset()
         self.assertEqual(html._episode, 1)
-        self.assertTrue(html._qps, [])
+        self.assertEqual(html._qps, [])
         html.record(state)
         self.assertEqual(len(html._qps), 0)
 
