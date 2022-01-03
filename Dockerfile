@@ -13,6 +13,7 @@ RUN pip3 install -U pip setuptools \
     brax \
     coverage \
     gym["classic_control"] \
+    ipython \
     matplotlib \
     pyvirtualdisplay \
     twine \
