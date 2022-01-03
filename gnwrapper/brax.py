@@ -220,11 +220,42 @@ class GymHTML(gym.Wrapper):
         self._html = _HTML(env._env.sys, directory, height, video_callable)
 
     def step(self, action):
+        """
+        Run one timestep of the environment's dynamics.
+
+        Parameters
+        ----------
+        action : brax.jumpy.ndarray (aka. Union[numpy.ndarray, jax.ndarray])
+            Action
+
+        Returns
+        -------
+        obs : brax.jumpy.ndarray (aka. Union[numpy.ndarray, jax.ndarray])
+            Next observation
+        reward : float
+            Reward
+        done : bool
+            Whether the episode is terminated
+        info : dict
+            Other information
+
+        Notes
+        -----
+        States are recorded automatically
+        """
         obs = self.env.step(action)
         self._html.record(self.env._state)
         return obs
 
     def reset(self):
+        """
+        Resets the environment's dynamics.
+
+        Returns
+        -------
+        obs : brax.jumpy.ndarray (aka. Union[numpy.ndarray, jax.ndarray])
+            Initial observation
+        """
         self._html.reset()
         return self.env.reset()
 
