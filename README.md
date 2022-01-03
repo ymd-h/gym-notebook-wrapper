@@ -18,7 +18,7 @@ Colab](https://colab.research.google.com/)).
 - [Xvfb](https://www.x.org/releases/X11R7.7/doc/man/man1/Xvfb.1.xhtml)
   - On Ubuntu, you can install `sudo apt update && sudo apt install xvfb`.
 - Open GL (for some environment)
-  - On Ubuntu, you can install `sudo apt update && sudo apt install python-opengl`
+  - On Ubuntu, you can install `sudo apt update && sudo apt install python3-opengl`
 
 ## 2. Installation
 
