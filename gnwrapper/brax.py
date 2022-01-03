@@ -79,7 +79,7 @@ class _HTML:
 
 def RaiseWhenAutoReset(env):
     while isinstance(env, benv.Wrapper):
-        if isinstance(env, benv.AutoResetWrapper):
+        if isinstance(env, benv.wrappers.AutoResetWrapper):
             raise ValueError("Auto Reset is not supported. " +
                              "Please call `create()/create_gym_env()` with "
                              "`auto_reset=False`")
