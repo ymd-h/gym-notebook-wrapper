@@ -108,6 +108,10 @@ class BraxHTML(benv.Wrapper):
             Function to determine whether each episode is recorded or not.
         jit : bool
             Whether wrap step/reset function with jax.jit
+
+        Raises
+        ------
+        ValueError: When ``env`` is wrapped with ``AutoReset``
         """
         RaiseWhenAutoReset(env)
         super().__init__(env)
@@ -174,6 +178,10 @@ class GymHTML(gym.Wrapper):
             Height in px. The default is ``480``.
         video_callable: (int) -> bool, optional
             Function to determine whether each episode is recorded or not.
+
+        Raises
+        ------
+        ValueError: When ``env`` is wrapped with ``AutoReset``
         """
         RaiseWhenAutoReset(env._env)
         super().__init__(env)
