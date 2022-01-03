@@ -23,7 +23,7 @@ class TestBrax(unittest.TestCase):
         self.assertEqual(html._episode, 0)
 
         rng = jp.random_prngkey(42)
-        rng, rng_use = jp.random_split(rng_use)
+        rng, rng_use = jp.random_split(rng)
         state = ant.reset(rng_use)
         html.reset()
         self.assertEqual(html._episode, 1)
@@ -48,7 +48,7 @@ class TestBrax(unittest.TestCase):
         self.assertEqual(html._episode, 0)
 
         rng = jp.random_prngkey(42)
-        rng, rng_use = jp.random_split(rng_use)
+        rng, rng_use = jp.random_split(rng)
         state = ant.reset(rng_use)
         html.reset()
         self.assertEqual(html._episode, 1)
