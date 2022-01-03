@@ -77,6 +77,14 @@ class _HTML:
                 ddisplay(dHTML(hstr.read()))
 
 
+def RaiseWhenAutoReset(env):
+    while isinstance(env, benv.Wrapper):
+        if isinstance(env, benv.AutoResetWrapper):
+            raise ValueError("Auto Reset is not supported. " +
+                             "Please call `create()/create_gym_env()` with "
+                             "`auto_reset=False`")
+        env = env.env
+
 class BraxHTML(benv.Wrapper):
     """
     HTML Wrapper to store Brax trajectory as HTML
@@ -101,6 +109,7 @@ class BraxHTML(benv.Wrapper):
         jit : bool
             Whether wrap step/reset function with jax.jit
         """
+        RaiseWhenAutoReset(env)
         super().__init__(env)
 
         self._html = _HTML(env.sys, directory, height, video_callable)
@@ -166,6 +175,7 @@ class GymHTML(gym.Wrapper):
         video_callable: (int) -> bool, optional
             Function to determine whether each episode is recorded or not.
         """
+        RaiseWhenAutoReset(env._env)
         super().__init__(env)
         self._html = _HTML(env._env.sys, directory, height, video_callable)
 
