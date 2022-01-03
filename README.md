@@ -153,7 +153,10 @@ it by `import gnwrapper.brax` or `from gnwrapper import brax` etc.
 ### 4.1 HTML Viewer with Brax Native Environment
 Wrap `brax.envs.Env` with `gnwrapper.brax.BraxHTML`. `step()` method
 automatically stores an episode, and saves it as html file at the
-episode end. You can embeds HTML viewer by calling `display()` method.
+episode end. You can embeds HTML viewer by calling `display()`
+method. Of cource, you can open the html file with your local browser
+as long as you have internet access. (Data is saved in the html file,
+however, the viewer is hosted on CDN.)
 
 Since this wrapper has Python side effect, you cannot wrap `step()` /
 `reset()` methods with `jax.jit`. Insted, you can wrap internal
@@ -206,7 +209,10 @@ ant.display()
 Wrap `brax.wrappers.GymWrapper` with
 `gnwrapper.brax.GymHTML`. `step()` method automatically stores an
 episode, and saves it as html file at the episode end. You can embeds
-HTML viewer by calling `display()` method.
+HTML viewer by calling `display()` method. Of cource, you can open the
+html file with your local browser as long as you have internet
+access. (Data is saved in the html file, however, the viewer is hosted
+on CDN.)
 
 Since `brax.wrapper.GymWrapper` already wraps `step()` / `reset()`
 methods with `jax.jit`, we don't provide functionality to wrap
