@@ -13,7 +13,7 @@ import brax
 from brax.io import html
 from brax.io.file import File
 from brax.envs import env as benv
-from brax.envs.wrappers import GymWrapper
+from brax.envs.wrappers import GymWrapper, AutoResetWrapper
 import brax.jumpy as jp
 import jax
 
@@ -79,7 +79,7 @@ class _HTML:
 
 def RaiseWhenAutoReset(env):
     while isinstance(env, benv.Wrapper):
-        if isinstance(env, benv.wrappers.AutoResetWrapper):
+        if isinstance(env, AutoResetWrapper):
             raise ValueError("Auto Reset is not supported. " +
                              "Please call `create()/create_gym_env()` with "
                              "`auto_reset=False`")
