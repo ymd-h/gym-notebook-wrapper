@@ -8,14 +8,15 @@
 
 
 Gym-Notebook-Wrapper provides small wrappers for running and rendering
-[OpenAI Gym](https://github.com/openai/gym) on [Jupyter
+[OpenAI Gym](https://github.com/openai/gym) and
+[Brax](https://github.com/google/brax) on [Jupyter
 Notebook](https://jupyter.org/) or similar (e.g. [Google
 Colab](https://colab.research.google.com/)).
 
 ## 1. Requirement
 
 - Linux
-- [Xvfb](https://www.x.org/releases/X11R7.7/doc/man/man1/Xvfb.1.xhtml)
+- [Xvfb](https://www.x.org/releases/X11R7.7/doc/man/man1/Xvfb.1.xhtml) (for Gym)
   - On Ubuntu, you can install `sudo apt update && sudo apt install xvfb`.
 - Open GL (for some environment)
   - On Ubuntu, you can install `sudo apt update && sudo apt install python3-opengl`
@@ -26,7 +27,7 @@ You can install from
 [PyPI](https://pypi.org/project/gym-notebook-wrapper/) with `pip install gym-notebook-wrapper`
 
 
-## 3. Usage
+## 3. Rendering Gym
 
 Three classes are implemented in `gnwrapper` module in this
 gym-notebook-wrapper package.
@@ -132,12 +133,118 @@ env.display()
 
 - Require disk space for save movie
 
-## 4. Notes
+### 3.4 Notes
 
 `gnwrapper.Animation` and `gnwrapper.LoopAnimation` inherit from
 `gym.Wrapper`, so that it can access any fields or mothods of
 `gym.Env` and `gym.Wrapper` (e.g. `action_space`).
 
+
+## 4. Rendering Brax
+Brax has HTML rendering in `brax.io.html`. We provide small wrapper
+classes to record episodes automatically and to display on Jupyter
+Notebook easily.
+
+Two classes are implemented in `gnwrapper.brax` module. Since this
+module requires `brax` package, the statement `import gnwrapper`
+doesn't import `gnwrapper.brax` submodule. You must explicitly import
+it by `import gnwrapper.brax` or `from gnwrapper import brax` etc.
+
+### 4.1 HTML Viewer with Brax Native Environment
+Wrap `brax.envs.Env` with `gnwrapper.brax.BraxHTML`.
+
+
+#### 4.1.1 Code
+```python
+from brax import envs
+import brax.jumpy as jp
+
+from gnwrapper.brax import BraxHTML
+
+rng = jp.random_prngkey(seed=42)
+
+ant = BraxHTML(envs.create("ant", auto_reset=False), video_callable = lambda ep: True)
+
+for i in range(2):
+    rng, rng_use = jp.random_split(rng)
+    state = ant.reset(rng_use)
+
+    while True:
+        rng, rng_use = jp.random_split(rng)
+        state = ant.step(state, jp.random_uniform(rng_use, (ant.action_size,)))
+        if state.done:
+		    # When `state.done = True`, the episode is written at html file.
+            break
+
+# We can get list of recorded episodes.
+episodes = ant.recorded_episodes()
+
+# `display()` method show all recorded episodes.
+# `display(1)` shows only episode 1, if it is recorded
+# `display([1, 2])` shows episode 1 & 2, if they are recorded, etc.
+ant.display()
+```
+
+#### 4.1.2 Parameters
+
+|Argument|Type|Description|
+|---|---|---|
+|`env`|`brax.envs.Env`|Environment|
+|`directory=None`|`Optional[str]`|Directory to store html. If `None`(default), time stamp (`"%Y%m%d-%H%M%S"`) is used. |
+|`heght=480`|`int`|Viewer height in px. (Maybe there is a Brax bug. See [this issue](https://github.com/google/brax/issues/142).)|
+|`video_callable=None`|`Optional[Callable[[int], bool]]`| Function to determine whether each episode is recorded or not. If `None` (default), every 1000 and cubic number less than 1000 are recorded |
+|`jit=True`|`bool`|Whether `step`/`reset` methods will be wapped by `jax.jit`|
+
+
+### 4.2 HTML Viewer with Gym compatible Brax Environment
+Wrap `brax.wrappers.GymWrapper` with `gnwrapper.brax.GymHTML`.
+
+#### 4.2.1 Code
+
+```python
+from brax import envs
+import brax.jumpy as jp
+
+from gnwrapper.brax import GymHTML
+
+rng = jp.random_prngkey(seed=42)
+rng, rng_use = jp.random_split(rng)
+
+ant = GymHTML(envs.create_gym_env("ant", auto_reset=False, seed=0), video_callable = lambda ep: True)
+
+for i in range(2):
+    obs = ant.reset()
+    while True:
+        rng, rng_use = jp.random_split(rng)
+        obs, rew, done, _ = ant.step(jp.random_uniform(rng_use, ant.action_space.shape))
+        if done:
+		    # When `done = True`, the episode is written at html file.
+            break
+
+# We can get list of recorded episodes.
+episodes = ant.recorded_episodes()
+
+# `display()` method show all recorded episodes.
+# `display(1)` shows only episode 1, if it is recorded
+# `display([1, 2])` shows episode 1 & 2, if they are recorded, etc.
+ant.display()
+```
+
+#### 4.2.2 Parameters
+
+|Argument|Type|Description|
+|---|---|---|
+|`env`|`brax.envs.Env`|Environment|
+|`directory=None`|`Optional[str]`|Directory to store html. If `None`(default), time stamp (`"%Y%m%d-%H%M%S"`) is used. |
+|`heght=480`|`int`|Viewer height in px. (Maybe there is a Brax bug. See [this issue](https://github.com/google/brax/issues/142).)|
+|`video_callable=None`|`Optional[Callable[[int], bool]]`| Function to determine whether each episode is recorded or not. If `None` (default), every 1000 and cubic number less than 1000 are recorded |
+
+
+### 4.3 Limitation
+Since `done` is always `False`, auto reset
+(aka. `brax.envs.wrappers.AutoResetWrapper`) is not supported. You
+must call `brax.envs.create()` or `brax.envs.create_gym_env()` with
+`auto_reset=False` argument.
 
 ## 5. Links
 
