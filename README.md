@@ -200,7 +200,7 @@ ant.display()
 |---|---|---|
 |`env`|`brax.envs.Env`|Environment|
 |`directory=None`|`Optional[str]`|Directory to store html. If `None`(default), time stamp (`"%Y%m%d-%H%M%S"`) is used. |
-|`heght=480`|`int`|Viewer height in px. (Maybe there is a Brax bug. See [this issue](https://github.com/google/brax/issues/142).)|
+|`heght=480`|`int`|Viewer height in px. (There is a Brax bug ([this issue](https://github.com/google/brax/issues/142)), however, PR was merged.) |
 |`video_callable=None`|`Optional[Callable[[int], bool]]`| Function to determine whether each episode is recorded or not. If `None` (default), every 1000 and cubic number less than 1000 are recorded |
 |`jit=True`|`bool`|Whether `step`/`reset` methods will be wapped by `jax.jit`|
 
@@ -255,7 +255,7 @@ ant.display()
 |---|---|---|
 |`env`|`brax.envs.Env`|Environment|
 |`directory=None`|`Optional[str]`|Directory to store html. If `None`(default), time stamp (`"%Y%m%d-%H%M%S"`) is used. |
-|`heght=480`|`int`|Viewer height in px. (Maybe there is a Brax bug. See [this issue](https://github.com/google/brax/issues/142).)|
+|`heght=480`|`int`|Viewer height in px. (There is a Brax bug ([this issue](https://github.com/google/brax/issues/142)), however, PR was merged.) |
 |`video_callable=None`|`Optional[Callable[[int], bool]]`| Function to determine whether each episode is recorded or not. If `None` (default), every 1000 and cubic number less than 1000 are recorded |
 
 
