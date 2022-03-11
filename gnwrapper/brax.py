@@ -7,7 +7,13 @@ from IPython.display import HTML as dHTML, display as ddisplay
 import numpy as np
 
 import gym
-from gym.wrappers.monitor import capped_cubic_video_schedule as default_schedule
+
+try:
+    # gym >= 0.20.0
+    from gym.wrappers import capped_cubic_video_schedule as default_schedule
+except ImportError:
+    # gym <= 0.19.0
+    from gym.wrappers.monitors import capped_cubic_video_schedule as default_schedule
 
 import brax
 from brax.io import html
