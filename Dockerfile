@@ -15,6 +15,7 @@ RUN pip3 install -U pip setuptools \
     gym["classic_control"] \
     ipython \
     matplotlib \
+    pyglet \
     pyvirtualdisplay \
     twine \
     unittest-xml-reporting \
