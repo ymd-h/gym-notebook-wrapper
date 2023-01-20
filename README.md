@@ -273,5 +273,4 @@ should not specify `batch_size` argument at `brax.envs.create()` or
 
 ## 5. Links
 
-- [Repository](https://gitlab.com/ymd_h/gym-notebook-wrapper)
-- [GitHub Mirror](https://github.com/ymd-h/gym-notebook-wrapper)
+- [Repository at GitHub](https://github.com/ymd-h/gym-notebook-wrapper)
