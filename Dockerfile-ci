@@ -1,0 +1,95 @@
+FROM python:latest AS base
+RUN apt update && \
+    apt install -y --no-install-recommends \
+    ffmpeg \
+    python3-opengl \
+    xvfb && \
+    apt clean && rm -rf /var/lib/apt/lists/*
+RUN --mount=type=cache,target=/root/.cache/pip pip install \
+    coverage \
+    ipython \
+    matplotlib \
+    pyglet \
+    pyvirtualdisplay \
+    unittest-xml-reporting
+
+FROM base AS test0.25.2
+RUN --mount=type=cache,target=/root/.cache/pip pip install \
+    brax gym["classic_control"]==0.25.2
+COPY setup.py setup.py
+COPY gnwrapper gnwrapper
+COPY test test
+COPY .coveragerc .coveragerc
+RUN coverage run -m xmlrunner discover test || true
+RUN mkdir -p /coverage && cp .coverage.* /coverage && \
+    mkdir -p /unittest && cp *.xml /unittest
+
+FROM base AS test0.26.0
+RUN --mount=type=cache,target=/root/.cache/pip pip install \
+    brax gym["classic_control"]==0.26.0
+COPY setup.py setup.py
+COPY gnwrapper gnwrapper
+COPY test test
+COPY .coveragerc .coveragerc
+RUN coverage run -m xmlrunner discover test || true
+RUN mkdir -p /coverage && cp .coverage.* /coverage && \
+    mkdir -p /unittest && cp *.xml /unittest
+
+FROM base AS test0.26.1
+RUN --mount=type=cache,target=/root/.cache/pip pip install \
+    brax gym["classic_control"]==0.26.1
+COPY setup.py setup.py
+COPY gnwrapper gnwrapper
+COPY test test
+COPY .coveragerc .coveragerc
+RUN coverage run -m xmlrunner discover test || true
+RUN mkdir -p /coverage && cp .coverage.* /coverage && \
+    mkdir -p /unittest && cp *.xml /unittest
+
+FROM base AS test0.26.2
+RUN --mount=type=cache,target=/root/.cache/pip pip install \
+    brax gym["classic_control"]==0.26.2
+COPY setup.py setup.py
+COPY gnwrapper gnwrapper
+COPY test test
+COPY .coveragerc .coveragerc
+RUN coverage run -m xmlrunner discover test || true
+RUN mkdir -p /coverage && cp .coverage.* /coverage && \
+    mkdir -p /unittest && cp *.xml /unittest
+
+FROM python:latest AS combine
+WORKDIR /coverage
+RUN --mount=type=cache,target=/root/.cache/pip pip install coverage
+COPY gnwrapper gnwrapper
+COPY .coveragerc .coveragerc
+COPY --from=test0.25.2 /coverage /coverage
+COPY --from=test0.26.0 /coverage /coverage
+COPY --from=test0.26.1 /coverage /coverage
+COPY --from=test0.26.2 /coverage /coverage
+RUN coverage combine && \
+    echo "## Test Coverage\n\`\`\`\n" >> summary.md && \
+    coverage report | tee -a summary.md && \
+    echo "\n\`\`\`" >> summary.md && \
+    mkdir -p /coverage/html && coverage html -d /coverage/html
+
+
+FROM python:latest AS build
+WORKDIR /build
+RUN --mount=type=cache,target=/root/.cache/pip pip install wheel
+COPY LICENSE LICENSE
+COPY setup.py setup.py
+COPY README.md README.md
+COPY gnwrapper gnwrapper
+RUN pip wheel --no-deps -w /dist .
+RUN python setup.py sdist -d /dist
+
+
+FROM scratch AS results
+COPY --from=test0.25.2 /unittest /unittest/0.25.2
+COPY --from=test0.26.0 /unittest /unittest/0.26.0
+COPY --from=test0.26.1 /unittest /unittest/0.26.1
+COPY --from=test0.26.2 /unittest /unittest/0.26.2
+COPY --from=combine /coverage/html /coverage/html
+COPY --from=combine /coverage/summary.md /coverage/summary.md
+COPY --from=build /dist /dist
+CMD [""]
