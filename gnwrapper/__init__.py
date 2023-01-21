@@ -6,6 +6,7 @@ from typing import Optional, Callable
 import subprocess
 from unittest.mock import patch
 
+import gym
 from gym import Wrapper
 
 try:
@@ -21,6 +22,18 @@ from IPython import display
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from pyvirtualdisplay import Display
+
+
+_gym_version = tuple(int(v) for v in gym.__version__.split("."))
+
+# Render API
+if _gym_version < (0, 26, 0):
+    def _render(env, *args, mode=None, **kwargs):
+        return env.render(*args, mode="rgb_array", **kwargs)
+else:
+    def _render(env, *args, mode=None, **kwargs):
+        return env.render(*args, **kwargs)
+
 
 
 class _VirtualDisplaySingleton(object):
@@ -65,7 +78,7 @@ class VirtualDisplay(Wrapper):
         """
         Render environment
         """
-        return self.env.render(mode='rgb_array',**kwargs)
+        return _render(self.env, mode='rgb_array', **kwargs)
 
 
 class Animation(VirtualDisplay):
@@ -102,7 +115,7 @@ class Animation(VirtualDisplay):
             Rendering image when mode == "rgb_array"
         """
         display.clear_output(wait=True)
-        _img = self.env.render(mode='rgb_array',**kwargs)
+        _img = _render(self.env, mode='rgb_array', **kwargs)
         if self._img is None:
             self._img = plt.imshow(_img)
         else:
@@ -147,7 +160,7 @@ class LoopAnimation(VirtualDisplay):
         img : numpy.ndarray or None
             Rendering image when mode == "rgb_array"
         """
-        self._img.append(self.env.render(mode='rgb_array',**kwargs))
+        self._img.append(_render(self.env, mode='rgb_array', **kwargs))
 
         if mode == 'rgb_array':
             return self._img[-1]
