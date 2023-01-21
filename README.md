@@ -113,10 +113,6 @@ env.display()
 Wrap `gym.Env` class with `gnwrapper.Monitor`. This wrapper implements
 `display()` method for embedding mp4 movie into Notebook.
 
-Note: `gym.wrappers.Monitor` was deprecated at `gym==0.20.0`, which
-was released on 14th
-September 2021. [See](https://github.com/openai/gym/issues/2297).
-
 If you call `display(reset=True)`, the video list is cleared and the
 next `display()` method shows only new videos.
 
