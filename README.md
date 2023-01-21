@@ -21,6 +21,11 @@ Colab](https://colab.research.google.com/)).
 - Open GL (for some environment)
   - On Ubuntu, you can install `sudo apt update && sudo apt install python3-opengl`
 
+> **Note**  
+> Tested Versions
+> * Python 3.10
+> * Gym 0.25.2 - 0.26.2
+
 ## 2. Installation
 
 You can install from
