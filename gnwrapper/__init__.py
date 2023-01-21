@@ -111,6 +111,13 @@ class Animation(VirtualDisplay):
         """
         display.clear_output(wait=True)
         _img = _render(self.env, mode='rgb_array', **kwargs)
+        if _img is None:
+            return
+
+        if isinstance(_img, list):
+            # render_mode: rgb_array_list
+            _img = _img[-1]
+
         if self._img is None:
             self._img = plt.imshow(_img)
         else:
@@ -154,9 +161,17 @@ class LoopAnimation(VirtualDisplay):
         img : numpy.ndarray or None
             Rendering image when mode == "rgb_array"
         """
-        self._img.append(_render(self.env, mode='rgb_array', **kwargs))
+        _img = _render(self.env, mode='rgb_array', **kwargs)
+        if _img is None:
+            return
 
-        return self._img[-1]
+        if isinstance(_img, list):
+            # render_mode: rgb_array_list
+            self._img = _img
+        else:
+            self._img.append(_img)
+
+        return _img
 
     def display(self,*,dpi=72,interval=50):
         """
