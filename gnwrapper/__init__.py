@@ -166,7 +166,7 @@ class LoopAnimation(VirtualDisplay):
                             self._img[0].shape[0]/dpi),
                    dpi=dpi)
         patch = plt.imshow(self._img[0])
-        plt.axis=('off')
+        plt.axis('off')
         animate = lambda i: patch.set_data(self._img[i])
         ani = animation.FuncAnimation(plt.gcf(),animate,
                                       frames=len(self._img),interval=interval)
