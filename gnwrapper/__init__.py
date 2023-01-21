@@ -286,10 +286,10 @@ class Monitor(RecordVideo):
 
             display.display(os.path.basename(f[0]))
             display.display(display.HTML(data="""
-            <video alt="test" controls>
+            <video alt="{1}" controls>
             <source src="data:video/mp4;base64,{0}" type="video/mp4" />
             </video>
-            """.format(encoded.decode('ascii'))))
+            """.format(encoded.decode('ascii'), os.path.basename(f[0]))))
 
         if reset:
             self.videos = []
