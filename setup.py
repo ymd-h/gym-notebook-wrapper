@@ -17,7 +17,7 @@ else:
 setup(name="gym-notebook-wrapper",
       author="Yamada Hiroyuki",
       version="1.3.2",
-      install_requires=["gym","matplotlib","pyvirtualdisplay","ipython","pymovie"],
+      install_requires=["gym","matplotlib","pyvirtualdisplay","ipython","moviepy"],
       extras_require={"test": ["brax"]},
       packages=find_packages(),
       url="https://github.com/ymd-h/gym-notebook-wrapper",
