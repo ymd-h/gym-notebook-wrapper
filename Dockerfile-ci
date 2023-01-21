@@ -10,6 +10,7 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install \
     ipython \
     matplotlib \
     pyglet \
+    pymovie \
     pyvirtualdisplay \
     unittest-xml-reporting
 
@@ -19,7 +20,7 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install \
 WORKDIR /test-ci
 COPY setup.py setup.py
 COPY gnwrapper gnwrapper
-RUN --mount=type=cache,target=/root/.cache/pip pip install .
+RUN --mount=type=cache,target=/root/.cache/pip pip install .[test]
 COPY test test
 COPY .coveragerc .coveragerc
 RUN coverage run -m xmlrunner discover -s test || true
@@ -32,7 +33,7 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install \
 WORKDIR /test-ci
 COPY setup.py setup.py
 COPY gnwrapper gnwrapper
-RUN --mount=type=cache,target=/root/.cache/pip pip install .
+RUN --mount=type=cache,target=/root/.cache/pip pip install .[test]
 COPY test test
 COPY .coveragerc .coveragerc
 RUN coverage run -m xmlrunner discover -s test || true
@@ -45,7 +46,7 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install \
 WORKDIR /test-ci
 COPY setup.py setup.py
 COPY gnwrapper gnwrapper
-RUN --mount=type=cache,target=/root/.cache/pip pip install .
+RUN --mount=type=cache,target=/root/.cache/pip pip install .[test]
 COPY test test
 COPY .coveragerc .coveragerc
 RUN coverage run -m xmlrunner discover -s test || true
@@ -58,7 +59,7 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install \
 WORKDIR /test-ci
 COPY setup.py setup.py
 COPY gnwrapper gnwrapper
-RUN --mount=type=cache,target=/root/.cache/pip pip install .
+RUN --mount=type=cache,target=/root/.cache/pip pip install .[test]
 COPY test test
 COPY .coveragerc .coveragerc
 RUN coverage run -m xmlrunner discover -s test || true
