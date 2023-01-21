@@ -1,5 +1,6 @@
 import os
 from setuptools import setup, find_packages
+import warnings
 
 description = "Wrapper for running/rendering OpenAI Gym on Jupyter Notebook"
 README = os.path.join(os.path.abspath(os.path.dirname(__file__)),'README.md')
