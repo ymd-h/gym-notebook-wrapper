@@ -1,5 +1,6 @@
 import os
 from setuptools import setup, find_packages
+import warnings
 
 description = "Wrapper for running/rendering OpenAI Gym on Jupyter Notebook"
 README = os.path.join(os.path.abspath(os.path.dirname(__file__)),'README.md')
@@ -16,9 +17,10 @@ else:
 setup(name="gym-notebook-wrapper",
       author="Yamada Hiroyuki",
       version="1.3.2",
-      install_requires=["gym","matplotlib","pyvirtualdisplay","ipython"],
-      packages=["gnwrapper"],
-      url="https://gitlab.com/ymd_h/gym-notebook-wrapper",
+      install_requires=["gym","matplotlib","pyvirtualdisplay","ipython","moviepy"],
+      extras_require={"test": ["brax"]},
+      packages=find_packages(),
+      url="https://github.com/ymd-h/gym-notebook-wrapper",
       classifiers=["Development Status :: 4 - Beta",
                    "Framework :: Jupyter",
                    "Intended Audience :: Science/Research",
