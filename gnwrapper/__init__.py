@@ -125,6 +125,7 @@ class Animation(VirtualDisplay):
 
         plt.axis('off')
         display.display(plt.gcf())
+        plt.close()
 
         return _img
 
