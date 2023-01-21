@@ -9,14 +9,7 @@ from unittest.mock import patch
 import gym
 from gym import Wrapper
 
-try:
-    # gym >= 0.20.0
-    from gym.wrappers import RecordVideo as _monitor
-    _video_callable_key = "episode_trigger"
-except ImportError:
-    # gym <= 0.19.0
-    from gym.wrappers import Monitor as _monitor
-    _video_callable_key = "video_callable"
+from gym.wrappers import RecordVideo
 
 from IPython import display
 import matplotlib.pyplot as plt
@@ -25,6 +18,8 @@ from pyvirtualdisplay import Display
 
 
 _gym_version = tuple(int(v) for v in gym.__version__.split("."))
+_video_callable_key = "episode_trigger"
+
 
 # Render API
 if _gym_version < (0, 26, 0):
@@ -177,7 +172,7 @@ class LoopAnimation(VirtualDisplay):
                                       frames=len(self._img),interval=interval)
         display.display(display.HTML(ani.to_jshtml()))
 
-class Monitor(_monitor):
+class Monitor(RecordVideo):
     """
     Monitor wrapper to store images as videos.
 
@@ -218,22 +213,14 @@ class Monitor(_monitor):
 
         kwargs[_video_callable_key] = video_callable
         super().__init__(env, directory, *args, **kwargs)
-        if not hasattr(self, "videos"):
-            # gym >= 0.20.0
-            self.videos = []
+        self.videos = []
 
     def _close_running_video(self):
         if self.video_recorder:
-            if hasattr(self, "_close_video_recorder"):
-                # gym <= 0.19.0
-                self._close_video_recorder()
-                self._flush(force=True)
-            else:
-                # gym >= 0.20.0
-                self.close_video_recorder()
-                if self.video_recorder.functional:
-                    self.videos.append((self.video_recorder.path,
-                                        self.video_recorder.metadata_path))
+            self.close_video_recorder()
+            if self.video_recorder.functional:
+                self.videos.append((self.video_recorder.path,
+                                    self.video_recorder.metadata_path))
             self.video_recorder = None
 
     def step(self,action):
@@ -251,16 +238,7 @@ class Monitor(_monitor):
         Reset Environment
         """
         try:
-            if hasattr(self, "stats_recorder"):
-                # gym <= 0.19.0
-                if self.stats_recorder and not self.stats_recorder.done:
-                    # StatsRecorder requires `done=True` before `reset()`
-                    self.stats_recorder.done = True
-                    self.stats_recorder.save_complete()
-            else:
-                # gym >= 0.20.0
-                self._close_running_video()
-
+            self._close_running_video()
             return super().reset(**kwargs)
         except KeyboardInterrupt:
             self._close_running_video()
