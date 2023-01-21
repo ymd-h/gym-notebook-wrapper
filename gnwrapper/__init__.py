@@ -268,6 +268,9 @@ class Monitor(_monitor):
             self._close_running_video()
             raise
 
+    def render(self, *args, **kwargs):
+        return _render(self.env)
+
     def display(self,reset: bool=False):
         """
         Display saved all movies
