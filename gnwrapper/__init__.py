@@ -6,21 +6,29 @@ from typing import Optional, Callable
 import subprocess
 from unittest.mock import patch
 
+import gym
 from gym import Wrapper
 
-try:
-    # gym >= 0.20.0
-    from gym.wrappers import RecordVideo as _monitor
-    _video_callable_key = "episode_trigger"
-except ImportError:
-    # gym <= 0.19.0
-    from gym.wrappers import Monitor as _monitor
-    _video_callable_key = "video_callable"
+from gym.wrappers import RecordVideo
 
 from IPython import display
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from pyvirtualdisplay import Display
+
+
+_gym_version = tuple(int(v) for v in gym.__version__.split("."))
+_video_callable_key = "episode_trigger"
+
+
+# Render API
+if _gym_version < (0, 26, 0):
+    def _render(env, *args, mode=None, **kwargs):
+        return env.render(*args, mode="rgb_array", **kwargs)
+else:
+    def _render(env, *args, mode=None, **kwargs):
+        return env.render(*args, **kwargs)
+
 
 
 class _VirtualDisplaySingleton(object):
@@ -65,7 +73,7 @@ class VirtualDisplay(Wrapper):
         """
         Render environment
         """
-        return self.env.render(mode='rgb_array',**kwargs)
+        return _render(self.env, mode='rgb_array', **kwargs)
 
 
 class Animation(VirtualDisplay):
@@ -102,7 +110,14 @@ class Animation(VirtualDisplay):
             Rendering image when mode == "rgb_array"
         """
         display.clear_output(wait=True)
-        _img = self.env.render(mode='rgb_array',**kwargs)
+        _img = _render(self.env, mode='rgb_array', **kwargs)
+        if _img is None:
+            return
+
+        if isinstance(_img, list):
+            # render_mode: rgb_array_list
+            _img = _img[-1]
+
         if self._img is None:
             self._img = plt.imshow(_img)
         else:
@@ -111,8 +126,7 @@ class Animation(VirtualDisplay):
         plt.axis('off')
         display.display(plt.gcf())
 
-        if mode == 'rgb_array':
-            return _img
+        return _img
 
 class LoopAnimation(VirtualDisplay):
     """
@@ -147,10 +161,17 @@ class LoopAnimation(VirtualDisplay):
         img : numpy.ndarray or None
             Rendering image when mode == "rgb_array"
         """
-        self._img.append(self.env.render(mode='rgb_array',**kwargs))
+        _img = _render(self.env, mode='rgb_array', **kwargs)
+        if _img is None:
+            return
 
-        if mode == 'rgb_array':
-            return self._img[-1]
+        if isinstance(_img, list):
+            # render_mode: rgb_array_list
+            self._img.append(_img[-1])
+        else:
+            self._img.append(_img)
+
+        return _img
 
     def display(self,*,dpi=72,interval=50):
         """
@@ -160,23 +181,22 @@ class LoopAnimation(VirtualDisplay):
                             self._img[0].shape[0]/dpi),
                    dpi=dpi)
         patch = plt.imshow(self._img[0])
-        plt.axis=('off')
+        plt.axis('off')
         animate = lambda i: patch.set_data(self._img[i])
         ani = animation.FuncAnimation(plt.gcf(),animate,
                                       frames=len(self._img),interval=interval)
         display.display(display.HTML(ani.to_jshtml()))
+        plt.close()
 
-class Monitor(_monitor):
+class Monitor(RecordVideo):
     """
     Monitor wrapper to store images as videos.
 
-    This class is a shin wrapper for ``gym.wrappers.Monitor`` (gym <= 0.19.0)
-    or ``gym.wrappers.RecordVideo`` (gym >= 0.20.0). This class also
-    have a method `display`, which shows recorded movies on Notebook.
+    This class also have a method `display`, which shows recorded
+    movies on Notebook.
 
     See Also
     --------
-    gym.wrappers.Monitor : https://github.com/openai/gym/blob/master/gym/wrappers/monitor.py
     gym.wrappers.RecordVideo : https://github.com/openai/gym/blob/master/gym/wrappers/record_video.py
     """
     def __init__(self, env, directory: Optional[str] = None, size = (1024, 768),
@@ -207,22 +227,14 @@ class Monitor(_monitor):
 
         kwargs[_video_callable_key] = video_callable
         super().__init__(env, directory, *args, **kwargs)
-        if not hasattr(self, "videos"):
-            # gym >= 0.20.0
-            self.videos = []
+        self.videos = []
 
     def _close_running_video(self):
         if self.video_recorder:
-            if hasattr(self, "_close_video_recorder"):
-                # gym <= 0.19.0
-                self._close_video_recorder()
-                self._flush(force=True)
-            else:
-                # gym >= 0.20.0
-                self.close_video_recorder()
-                if self.video_recorder.functional:
-                    self.videos.append((self.video_recorder.path,
-                                        self.video_recorder.metadata_path))
+            self.close_video_recorder()
+            if self.video_recorder.functional:
+                self.videos.append((self.video_recorder.path,
+                                    self.video_recorder.metadata_path))
             self.video_recorder = None
 
     def step(self,action):
@@ -231,7 +243,7 @@ class Monitor(_monitor):
         """
         try:
             return super().step(action)
-        except KeyboardInterrupt as k:
+        except KeyboardInterrupt:
             self._close_running_video()
             raise
 
@@ -240,20 +252,14 @@ class Monitor(_monitor):
         Reset Environment
         """
         try:
-            if hasattr(self, "stats_recorder"):
-                # gym <= 0.19.0
-                if self.stats_recorder and not self.stats_recorder.done:
-                    # StatsRecorder requires `done=True` before `reset()`
-                    self.stats_recorder.done = True
-                    self.stats_recorder.save_complete()
-            else:
-                # gym >= 0.20.0
-                self._close_running_video()
-
+            self._close_running_video()
             return super().reset(**kwargs)
         except KeyboardInterrupt:
             self._close_running_video()
             raise
+
+    def render(self, *args, **kwargs):
+        return _render(self.env)
 
     def display(self,reset: bool=False):
         """
@@ -280,10 +286,10 @@ class Monitor(_monitor):
 
             display.display(os.path.basename(f[0]))
             display.display(display.HTML(data="""
-            <video alt="test" controls>
+            <video alt="{1}" controls>
             <source src="data:video/mp4;base64,{0}" type="video/mp4" />
             </video>
-            """.format(encoded.decode('ascii'))))
+            """.format(encoded.decode('ascii'), os.path.basename(f[0]))))
 
         if reset:
             self.videos = []

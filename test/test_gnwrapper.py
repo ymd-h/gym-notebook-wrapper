@@ -7,25 +7,39 @@ import gnwrapper
 import gym
 
 
+version = tuple(int(v) for v in gym.__version__.split("."))
+if version >= (0, 26, 0):
+    def make(env):
+        return gym.make(env, render_mode="rgb_array")
+else:
+    def make(env):
+        return gym.make(env)
+
+
 class TestVirtualDisplay(unittest.TestCase):
     def test_init(self):
-        env = gnwrapper.VirtualDisplay(gym.make("CartPole-v1"))
+        env = gnwrapper.VirtualDisplay(make("CartPole-v1"))
         self.assertIsNotNone(os.getenv("DISPLAY"))
 
     def test_render_return(self):
-        env = gnwrapper.VirtualDisplay(gym.make("CartPole-v1"))
+        env = gnwrapper.VirtualDisplay(make("CartPole-v1"))
         env.reset()
         self.assertIsNotNone(env.render())
 
 
 class TestAnimation(unittest.TestCase):
     def test_render(self):
-        env = gnwrapper.Animation(gym.make("CartPole-v1"))
+        env = gnwrapper.Animation(make("CartPole-v1"))
 
         env.reset()
 
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term | trunc
             env.render()
 
             if d:
@@ -33,12 +47,17 @@ class TestAnimation(unittest.TestCase):
 
 class TestLoopAnimation(unittest.TestCase):
     def test_render(self):
-        env = gnwrapper.LoopAnimation(gym.make("CartPole-v1"))
+        env = gnwrapper.LoopAnimation(make("CartPole-v1"))
 
         env.reset()
 
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term | trunc
             env.render()
 
             if d:
@@ -48,12 +67,17 @@ class TestLoopAnimation(unittest.TestCase):
 
 class TestMonitor(unittest.TestCase):
     def test_display(self):
-        env = gnwrapper.Monitor(gym.make('CartPole-v1'),directory="./")
+        env = gnwrapper.Monitor(make('CartPole-v1'),directory="./")
 
         env.reset()
 
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term | trunc
 
             if d:
                 env.reset()
@@ -61,12 +85,17 @@ class TestMonitor(unittest.TestCase):
         env.display()
 
     def test_reset_videos(self):
-        env = gnwrapper.Monitor(gym.make('CartPole-v1'),
+        env = gnwrapper.Monitor(make('CartPole-v1'),
                                 directory="./test_reset_videos/")
 
         env.reset()
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term | trunc
 
             if d:
                 env.reset()
@@ -76,12 +105,17 @@ class TestMonitor(unittest.TestCase):
         self.assertEqual(len(env.videos),0)
 
     def test_default_directory(self):
-        env = gnwrapper.Monitor(gym.make('CartPole-v1'))
+        env = gnwrapper.Monitor(make('CartPole-v1'))
 
         env.reset()
 
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term | trunc
 
             if d:
                 env.reset()
@@ -97,14 +131,19 @@ class TestMonitor(unittest.TestCase):
 
         Ref: https://gitlab.com/ymd_h/gym-notebook-wrapper/-/issues/2
         """
-        env = gnwrapper.Monitor(gym.make('CartPole-v1'),
+        env = gnwrapper.Monitor(make('CartPole-v1'),
                                 directory="./test_last_videos/",
                                 video_callable=lambda ep: True)
         env.reset()
 
         n_video = 1
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term | trunc
 
             if d:
                 env.reset()
@@ -119,7 +158,12 @@ class TestMonitor(unittest.TestCase):
         # Can run normally after
         env.reset()
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term | trunc
 
             if d:
                 env.reset()
@@ -135,7 +179,7 @@ class TestMonitor(unittest.TestCase):
         CartPole = "gym.envs.classic_control.cartpole.CartPoleEnv"
         VideoRecorder = "gym.wrappers.monitoring.video_recorder.VideoRecorder"
 
-        env = gnwrapper.Monitor(gym.make('CartPole-v1'),
+        env = gnwrapper.Monitor(make('CartPole-v1'),
                                 directory="./test_keyboard_interrupt/",
                                 video_callable=lambda ep: True)
 
@@ -172,13 +216,18 @@ class TestMonitor(unittest.TestCase):
         """
         Display after close
         """
-        env = gnwrapper.Monitor(gym.make('CartPole-v1'),
+        env = gnwrapper.Monitor(make('CartPole-v1'),
                                 directory="./test_display_after_close/",
                                 video_callable=lambda ep: True)
         env.reset()
 
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term | trunc
 
             if d:
                 env.reset()

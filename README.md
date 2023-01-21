@@ -28,6 +28,12 @@ You can install from
 
 
 ## 3. Rendering Gym
+> **Warning**  
+> Gym has changed its API.
+> For example, until v0.25.2 `env.step(action)` returns 4 values,
+> but from v0.26.0 it returns 5 values. (`done` was divided to
+> `termination` and `truncation`.)
+
 
 Three classes are implemented in `gnwrapper` module in this
 gym-notebook-wrapper package.
@@ -44,16 +50,16 @@ is following;
 import gnwrapper
 import gym
 
-env = gnwrapper.Animation(gym.make('CartPole-v1'))
+env = gnwrapper.Animation(gym.make('CartPole-v1', render_mode="rgb_array"))
 
 obs = env.reset()
 
 for _ in range(1000):
-    next_obs, reward, done, info = env.step(env.action_space.sample())
+    next_obs, reward, term, trunc, info = env.step(env.action_space.sample())
     env.render()
 
     obs = next_obs
-    if done:
+    if term or trunc:
         obs = env.reset()
 ```
 
@@ -75,16 +81,16 @@ loop animation by `display(dpi=72,interval=50)` methos.
 import gnwrapper
 import gym
 
-env = gnwrapper.LoopAnimation(gym.make('CartPole-v1'))
+env = gnwrapper.LoopAnimation(gym.make('CartPole-v1', render_mode="rgb_array"))
 
 obs = env.reset()
 
 for _ in range(100):
-    next_obs, reward, done, info = env.step(env.action_space.sample())
+    next_obs, reward, term, trunc, info = env.step(env.action_space.sample())
     env.render()
 
     obs = next_obs
-    if done:
+    if term or trunc:
         obs = env.reset()
 
 env.display()
@@ -117,13 +123,13 @@ next `display()` method shows only new videos.
 import gnwrapper
 import gym
 
-env = gnwrapper.Monitor(gym.make('CartPole-v1'),directory="./")
+env = gnwrapper.Monitor(gym.make('CartPole-v1', render_mode="rgb_array"),directory="./")
 
 o = env.reset()
 
 for _ in range(100):
-    o, r, d, i = env.step(env.action_space.sample())
-    if d:
+    o, r, term, trunc, i = env.step(env.action_space.sample())
+    if term or trunc:
         env.reset()
 
 env.display()
