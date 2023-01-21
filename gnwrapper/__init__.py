@@ -176,13 +176,11 @@ class Monitor(RecordVideo):
     """
     Monitor wrapper to store images as videos.
 
-    This class is a shin wrapper for ``gym.wrappers.Monitor`` (gym <= 0.19.0)
-    or ``gym.wrappers.RecordVideo`` (gym >= 0.20.0). This class also
-    have a method `display`, which shows recorded movies on Notebook.
+    This class also have a method `display`, which shows recorded
+    movies on Notebook.
 
     See Also
     --------
-    gym.wrappers.Monitor : https://github.com/openai/gym/blob/master/gym/wrappers/monitor.py
     gym.wrappers.RecordVideo : https://github.com/openai/gym/blob/master/gym/wrappers/record_video.py
     """
     def __init__(self, env, directory: Optional[str] = None, size = (1024, 768),
