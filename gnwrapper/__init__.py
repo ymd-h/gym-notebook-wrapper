@@ -186,6 +186,7 @@ class LoopAnimation(VirtualDisplay):
         ani = animation.FuncAnimation(plt.gcf(),animate,
                                       frames=len(self._img),interval=interval)
         display.display(display.HTML(ani.to_jshtml()))
+        plt.close()
 
 class Monitor(RecordVideo):
     """
