@@ -124,8 +124,7 @@ class Animation(VirtualDisplay):
         plt.axis('off')
         display.display(plt.gcf())
 
-        if mode == 'rgb_array':
-            return _img
+        return _img
 
 class LoopAnimation(VirtualDisplay):
     """
@@ -162,8 +161,7 @@ class LoopAnimation(VirtualDisplay):
         """
         self._img.append(_render(self.env, mode='rgb_array', **kwargs))
 
-        if mode == 'rgb_array':
-            return self._img[-1]
+        return self._img[-1]
 
     def display(self,*,dpi=72,interval=50):
         """
