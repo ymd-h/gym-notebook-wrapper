@@ -25,7 +25,12 @@ class TestAnimation(unittest.TestCase):
         env.reset()
 
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term & trunc
             env.render()
 
             if d:
@@ -38,7 +43,12 @@ class TestLoopAnimation(unittest.TestCase):
         env.reset()
 
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term & trunc
             env.render()
 
             if d:
@@ -53,7 +63,12 @@ class TestMonitor(unittest.TestCase):
         env.reset()
 
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term & trunc
 
             if d:
                 env.reset()
@@ -66,7 +81,12 @@ class TestMonitor(unittest.TestCase):
 
         env.reset()
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term & trunc
 
             if d:
                 env.reset()
@@ -81,7 +101,12 @@ class TestMonitor(unittest.TestCase):
         env.reset()
 
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term & trunc
 
             if d:
                 env.reset()
@@ -104,7 +129,12 @@ class TestMonitor(unittest.TestCase):
 
         n_video = 1
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term & trunc
 
             if d:
                 env.reset()
@@ -119,7 +149,12 @@ class TestMonitor(unittest.TestCase):
         # Can run normally after
         env.reset()
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term & trunc
 
             if d:
                 env.reset()
@@ -178,7 +213,12 @@ class TestMonitor(unittest.TestCase):
         env.reset()
 
         for _ in range(100):
-            o, r, d, i = env.step(env.action_space.sample())
+            ret = env.step(env.action_space.sample())
+            if len(ret) == 4:
+                o, r, d, i = ret
+            else:
+                o, r, term, trunc, i = ret
+                d = term & trunc
 
             if d:
                 env.reset()
