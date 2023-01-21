@@ -167,7 +167,7 @@ class LoopAnimation(VirtualDisplay):
 
         if isinstance(_img, list):
             # render_mode: rgb_array_list
-            self._img = _img
+            self._img.append(_img[-1])
         else:
             self._img.append(_img)
 
