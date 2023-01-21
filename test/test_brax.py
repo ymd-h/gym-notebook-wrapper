@@ -57,7 +57,7 @@ class TestBrax(unittest.TestCase):
         self.assertEqual(len(html._qps), 0)
 
     def test_brax(self):
-        ant = BraxHTML(envs.create("ant", auto_reset=False),
+        ant = BraxHTML(envs.create("ant", auto_reset=False, episode_length=20),
                        video_callable=lambda ep: True)
 
         rng = jp.random_prngkey(0)
@@ -74,7 +74,7 @@ class TestBrax(unittest.TestCase):
         ant.display()
 
     def test_brax_without_jit(self):
-        ant = BraxHTML(envs.create("ant", auto_reset=False),
+        ant = BraxHTML(envs.create("ant", auto_reset=False, episode_length=20),
                        video_callable=lambda ep: True,
                        jit=False)
 
@@ -92,7 +92,8 @@ class TestBrax(unittest.TestCase):
         ant.display()
 
     def test_gym(self):
-        ant = GymHTML(envs.create_gym_env("ant", auto_reset=False, seed=42),
+        ant = GymHTML(envs.create_gym_env("ant", auto_reset=False, seed=42,
+                                          episode_length=20),
                       video_callable=lambda ep: True)
 
         rng = jp.random_prngkey(0)
