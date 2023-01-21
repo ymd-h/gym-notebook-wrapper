@@ -242,7 +242,7 @@ class Monitor(RecordVideo):
         """
         try:
             return super().step(action)
-        except KeyboardInterrupt as k:
+        except KeyboardInterrupt:
             self._close_running_video()
             raise
 
