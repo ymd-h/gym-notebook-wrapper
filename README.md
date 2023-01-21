@@ -28,6 +28,12 @@ You can install from
 
 
 ## 3. Rendering Gym
+> **Warning**  
+> Gym has changed its API.
+> For example, until v0.25.2 `env.step(action)` returns 4 values,
+> but from v0.26.0 it returns 5 values. (`done` was divided to
+> `termination` and `truncation`.)
+
 
 Three classes are implemented in `gnwrapper` module in this
 gym-notebook-wrapper package.
