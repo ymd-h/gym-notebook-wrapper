@@ -18,9 +18,9 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install \
     brax gym["classic_control"]==0.25.2
 COPY setup.py setup.py
 COPY gnwrapper gnwrapper
+RUN --mount=type=cache,target=/root/.cache/pip pip install .
 COPY test test
 COPY .coveragerc .coveragerc
-RUN --mount=type=cache,target=/root/.cache/pip pip install .
 RUN coverage run -m xmlrunner discover test || true
 RUN mkdir -p /coverage && cp .coverage.* /coverage && \
     mkdir -p /unittest && cp *.xml /unittest
@@ -30,9 +30,9 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install \
     brax gym["classic_control"]==0.26.0
 COPY setup.py setup.py
 COPY gnwrapper gnwrapper
+RUN --mount=type=cache,target=/root/.cache/pip pip install .
 COPY test test
 COPY .coveragerc .coveragerc
-RUN --mount=type=cache,target=/root/.cache/pip pip install .
 RUN coverage run -m xmlrunner discover test || true
 RUN mkdir -p /coverage && cp .coverage.* /coverage && \
     mkdir -p /unittest && cp *.xml /unittest
@@ -42,9 +42,9 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install \
     brax gym["classic_control"]==0.26.1
 COPY setup.py setup.py
 COPY gnwrapper gnwrapper
+RUN --mount=type=cache,target=/root/.cache/pip pip install .
 COPY test test
 COPY .coveragerc .coveragerc
-RUN --mount=type=cache,target=/root/.cache/pip pip install .
 RUN coverage run -m xmlrunner discover test || true
 RUN mkdir -p /coverage && cp .coverage.* /coverage && \
     mkdir -p /unittest && cp *.xml /unittest
@@ -54,9 +54,9 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install \
     brax gym["classic_control"]==0.26.2
 COPY setup.py setup.py
 COPY gnwrapper gnwrapper
+RUN --mount=type=cache,target=/root/.cache/pip pip install .
 COPY test test
 COPY .coveragerc .coveragerc
-RUN --mount=type=cache,target=/root/.cache/pip pip install .
 RUN coverage run -m xmlrunner discover test || true
 RUN mkdir -p /coverage && cp .coverage.* /coverage && \
     mkdir -p /unittest && cp *.xml /unittest
