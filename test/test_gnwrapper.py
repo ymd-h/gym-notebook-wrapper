@@ -30,7 +30,7 @@ class TestAnimation(unittest.TestCase):
                 o, r, d, i = ret
             else:
                 o, r, term, trunc, i = ret
-                d = term & trunc
+                d = term | trunc
             env.render()
 
             if d:
@@ -48,7 +48,7 @@ class TestLoopAnimation(unittest.TestCase):
                 o, r, d, i = ret
             else:
                 o, r, term, trunc, i = ret
-                d = term & trunc
+                d = term | trunc
             env.render()
 
             if d:
@@ -68,7 +68,7 @@ class TestMonitor(unittest.TestCase):
                 o, r, d, i = ret
             else:
                 o, r, term, trunc, i = ret
-                d = term & trunc
+                d = term | trunc
 
             if d:
                 env.reset()
@@ -86,7 +86,7 @@ class TestMonitor(unittest.TestCase):
                 o, r, d, i = ret
             else:
                 o, r, term, trunc, i = ret
-                d = term & trunc
+                d = term | trunc
 
             if d:
                 env.reset()
@@ -106,7 +106,7 @@ class TestMonitor(unittest.TestCase):
                 o, r, d, i = ret
             else:
                 o, r, term, trunc, i = ret
-                d = term & trunc
+                d = term | trunc
 
             if d:
                 env.reset()
@@ -134,7 +134,7 @@ class TestMonitor(unittest.TestCase):
                 o, r, d, i = ret
             else:
                 o, r, term, trunc, i = ret
-                d = term & trunc
+                d = term | trunc
 
             if d:
                 env.reset()
@@ -154,7 +154,7 @@ class TestMonitor(unittest.TestCase):
                 o, r, d, i = ret
             else:
                 o, r, term, trunc, i = ret
-                d = term & trunc
+                d = term | trunc
 
             if d:
                 env.reset()
@@ -218,7 +218,7 @@ class TestMonitor(unittest.TestCase):
                 o, r, d, i = ret
             else:
                 o, r, term, trunc, i = ret
-                d = term & trunc
+                d = term | trunc
 
             if d:
                 env.reset()
