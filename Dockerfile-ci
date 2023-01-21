@@ -35,7 +35,7 @@ COPY gnwrapper gnwrapper
 RUN --mount=type=cache,target=/root/.cache/pip pip install .
 COPY test test
 COPY .coveragerc .coveragerc
-RUN coverage run -m xmlrunner discover -s test -p "*.py" || true
+RUN coverage run -m xmlrunner discover -s test || true
 RUN mkdir -p /coverage && cp .coverage.* /coverage && \
     mkdir -p /unittest && cp *.xml /unittest
 
@@ -48,7 +48,7 @@ COPY gnwrapper gnwrapper
 RUN --mount=type=cache,target=/root/.cache/pip pip install .
 COPY test test
 COPY .coveragerc .coveragerc
-RUN coverage run -m xmlrunner discover -s test -p "*.py" || true
+RUN coverage run -m xmlrunner discover -s test || true
 RUN mkdir -p /coverage && cp .coverage.* /coverage && \
     mkdir -p /unittest && cp *.xml /unittest
 
@@ -61,7 +61,7 @@ COPY gnwrapper gnwrapper
 RUN --mount=type=cache,target=/root/.cache/pip pip install .
 COPY test test
 COPY .coveragerc .coveragerc
-RUN coverage run -m xmlrunner discover -s test -p "*.py" || true
+RUN coverage run -m xmlrunner discover -s test || true
 RUN mkdir -p /coverage && cp .coverage.* /coverage && \
     mkdir -p /unittest && cp *.xml /unittest
 
